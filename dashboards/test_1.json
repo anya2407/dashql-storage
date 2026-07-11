@@ -1,0 +1,18 @@
+{
+  "dashboard_id": "test_1",
+  "request": "test dashboard",
+  "dashboard_layout": [
+    {
+      "id": "c1",
+      "title": "Test",
+      "type": "kpi"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "c1",
+      "sql": "SELECT 1"
+    }
+  ],
+  "timestamp": "2026-07-12"
+}
