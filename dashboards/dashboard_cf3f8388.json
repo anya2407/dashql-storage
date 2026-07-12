@@ -1,0 +1,90 @@
+{
+  "dashboard_id": "dashboard_cf3f8388",
+  "request": "orders in germany",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Total Orders in Germany",
+      "type": "kpi"
+    },
+    {
+      "id": "component_2",
+      "title": "Total Revenue from Germany",
+      "type": "kpi"
+    },
+    {
+      "id": "component_3",
+      "title": "Monthly Revenue Trend (Germany)",
+      "type": "chart",
+      "chart_type": "line",
+      "x": "OrderMonth",
+      "y": "MonthlyRevenue"
+    },
+    {
+      "id": "component_4",
+      "title": "Top Products by Sales (Germany)",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "ProductName",
+      "y": "TotalRevenue"
+    },
+    {
+      "id": "component_5",
+      "title": "Top Customers in Germany",
+      "type": "table"
+    },
+    {
+      "id": "component_6",
+      "title": "Orders by Ship City (Germany)",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "ShipCity",
+      "y": "NumberOfOrders"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Total Orders in Germany",
+      "type": "kpi",
+      "description": "Total number of orders placed from Germany",
+      "sql": "SELECT COUNT(OrderID) FROM Orders WHERE ShipCountry = 'Germany';"
+    },
+    {
+      "id": "component_2",
+      "title": "Total Revenue from Germany",
+      "type": "kpi",
+      "description": "Overall revenue generated from German orders",
+      "sql": "SELECT SUM(T2.UnitPrice * T2.Quantity * (1 - T2.Discount)) FROM Orders AS T1 INNER JOIN \"Order Details\" AS T2 ON T1.OrderID = T2.OrderID WHERE T1.ShipCountry = 'Germany';"
+    },
+    {
+      "id": "component_3",
+      "title": "Monthly Revenue Trend (Germany)",
+      "type": "chart",
+      "description": "Monthly revenue trend for orders shipped to Germany",
+      "sql": "SELECT STRFTIME('%Y-%m', T1.OrderDate) AS OrderMonth, SUM(T2.UnitPrice * T2.Quantity * (1 - T2.Discount)) AS MonthlyRevenue FROM Orders AS T1 INNER JOIN \"Order Details\" AS T2 ON T1.OrderID = T2.OrderID WHERE T1.ShipCountry = 'Germany' GROUP BY OrderMonth ORDER BY OrderMonth;"
+    },
+    {
+      "id": "component_4",
+      "title": "Top Products by Sales (Germany)",
+      "type": "chart",
+      "description": "Top selling products in Germany by revenue",
+      "sql": "SELECT T3.ProductName, SUM(T2.UnitPrice * T2.Quantity * (1 - T2.Discount)) AS TotalRevenue FROM Orders AS T1 INNER JOIN \"Order Details\" AS T2 ON T1.OrderID = T2.OrderID INNER JOIN Products AS T3 ON T2.ProductID = T3.ProductID WHERE T1.ShipCountry = 'Germany' GROUP BY T3.ProductName ORDER BY TotalRevenue DESC LIMIT 10;"
+    },
+    {
+      "id": "component_5",
+      "title": "Top Customers in Germany",
+      "type": "table",
+      "description": "Customers with the highest order value from Germany",
+      "sql": "SELECT T3.CompanyName, T3.ContactName, SUM(T2.UnitPrice * T2.Quantity * (1 - T2.Discount)) AS TotalOrderValue FROM Orders AS T1 INNER JOIN \"Order Details\" AS T2 ON T1.OrderID = T2.OrderID INNER JOIN Customers AS T3 ON T1.CustomerID = T3.CustomerID WHERE T1.ShipCountry = 'Germany' GROUP BY T3.CustomerID, T3.CompanyName, T3.ContactName ORDER BY TotalOrderValue DESC LIMIT 10;"
+    },
+    {
+      "id": "component_6",
+      "title": "Orders by Ship City (Germany)",
+      "type": "chart",
+      "description": "Distribution of orders across different cities in Germany",
+      "sql": "SELECT ShipCity, COUNT(OrderID) AS NumberOfOrders FROM Orders WHERE ShipCountry = 'Germany' GROUP BY ShipCity ORDER BY NumberOfOrders DESC;"
+    }
+  ],
+  "timestamp": "2026-07-12T15:04:25.638636"
+}
