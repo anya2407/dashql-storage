@@ -1,0 +1,51 @@
+{
+  "dashboard_id": "dashboard_369f3b77",
+  "request": "Show me a summary of orders by country, including customer contact details",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Orders by Shipping Country",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "ShipCountry",
+      "y": "TotalOrders"
+    },
+    {
+      "id": "component_2",
+      "title": "Revenue by Shipping Country",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "ShipCountry",
+      "y": "TotalRevenue"
+    },
+    {
+      "id": "component_3",
+      "title": "Country Order Metrics",
+      "type": "table"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Orders by Shipping Country",
+      "type": "chart",
+      "description": "Total number of orders grouped by the shipping country",
+      "sql": "SELECT ShipCountry, COUNT(OrderID) AS TotalOrders FROM Orders GROUP BY ShipCountry ORDER BY TotalOrders DESC;"
+    },
+    {
+      "id": "component_2",
+      "title": "Revenue by Shipping Country",
+      "type": "chart",
+      "description": "Total revenue generated from orders, grouped by the shipping country",
+      "sql": "SELECT o.ShipCountry, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalRevenue FROM Orders AS o JOIN \"Order Details\" AS od ON o.OrderID = od.OrderID GROUP BY o.ShipCountry ORDER BY TotalRevenue DESC;"
+    },
+    {
+      "id": "component_3",
+      "title": "Country Order Metrics",
+      "type": "table",
+      "description": "Summary of total orders and total revenue for each shipping country",
+      "sql": "SELECT o.ShipCountry, COUNT(DISTINCT o.OrderID) AS TotalOrders, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalRevenue FROM Orders AS o JOIN \"Order Details\" AS od ON o.OrderID = od.OrderID GROUP BY o.ShipCountry ORDER BY TotalOrders DESC, TotalRevenue DESC;"
+    }
+  ],
+  "timestamp": "2026-07-13T03:59:19.221653"
+}
