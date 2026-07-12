@@ -1,0 +1,66 @@
+{
+  "dashboard_id": "dashboard_023c1db0",
+  "request": "Show me monthly revenue trends",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Monthly Revenue Trend",
+      "type": "chart",
+      "chart_type": "line",
+      "x": "OrderMonth",
+      "y": "MonthlyRevenue"
+    },
+    {
+      "id": "component_2",
+      "title": "Total Revenue",
+      "type": "kpi"
+    },
+    {
+      "id": "component_3",
+      "title": "Revenue by Product Category",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "CategoryName",
+      "y": "Revenue"
+    },
+    {
+      "id": "component_4",
+      "title": "Revenue by Customer Country",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "Country",
+      "y": "Revenue"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Monthly Revenue Trend",
+      "type": "chart",
+      "description": "Monthly revenue trend over time",
+      "sql": "SELECT STRFTIME('%Y-%m', T1.OrderDate) AS OrderMonth, SUM(T2.UnitPrice * T2.Quantity * (1 - T2.Discount)) AS MonthlyRevenue FROM Orders AS T1 INNER JOIN \"Order Details\" AS T2 ON T1.OrderID = T2.OrderID GROUP BY OrderMonth ORDER BY OrderMonth;"
+    },
+    {
+      "id": "component_2",
+      "title": "Total Revenue",
+      "type": "kpi",
+      "description": "Overall total revenue",
+      "sql": "SELECT SUM(T1.UnitPrice * T1.Quantity * (1 - T1.Discount)) AS TotalRevenue FROM \"Order Details\" AS T1;"
+    },
+    {
+      "id": "component_3",
+      "title": "Revenue by Product Category",
+      "type": "chart",
+      "description": "Revenue distribution across product categories",
+      "sql": "SELECT T1.CategoryName, SUM(T3.UnitPrice * T3.Quantity * (1 - T3.Discount)) AS Revenue FROM Categories AS T1 INNER JOIN Products AS T2 ON T1.CategoryID = T2.CategoryID INNER JOIN \"Order Details\" AS T3 ON T2.ProductID = T3.ProductID GROUP BY T1.CategoryName ORDER BY Revenue DESC;"
+    },
+    {
+      "id": "component_4",
+      "title": "Revenue by Customer Country",
+      "type": "chart",
+      "description": "Revenue distribution by customer country",
+      "sql": "SELECT T1.Country, SUM(T3.UnitPrice * T3.Quantity * (1 - T3.Discount)) AS Revenue FROM Customers AS T1 INNER JOIN Orders AS T2 ON T1.CustomerID = T2.CustomerID INNER JOIN \"Order Details\" AS T3 ON T2.OrderID = T3.OrderID GROUP BY T1.Country ORDER BY Revenue DESC;"
+    }
+  ],
+  "timestamp": "2026-07-13T03:58:23.209648"
+}
