@@ -1,0 +1,75 @@
+{
+  "dashboard_id": "dashboard_1198c73a",
+  "request": "share countrywise details of all the products ",
+  "dashboard_layout": [
+    {
+      "id": "product_country_sales_table",
+      "title": "Product Sales Details by Country",
+      "type": "table"
+    },
+    {
+      "id": "top_countries_by_sales_chart",
+      "title": "Top Countries by Total Product Sales Value",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "ShipCountry",
+      "y": "TotalSalesValue"
+    },
+    {
+      "id": "top_products_by_country_chart",
+      "title": "Top Products by Sales Value (Per Country)",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "ProductName",
+      "y": "TotalSalesValue"
+    },
+    {
+      "id": "country_filter",
+      "title": "Country Selector",
+      "type": "filter"
+    },
+    {
+      "id": "product_category_filter",
+      "title": "Product Category Selector",
+      "type": "filter"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "product_country_sales_table",
+      "title": "Product Sales Details by Country",
+      "type": "table",
+      "description": "Detailed breakdown of each product's sales performance (quantity and revenue) in every country it was shipped to.",
+      "sql": "SELECT\n  P.ProductName,\n  O.ShipCountry,\n  SUM(OD.Quantity) AS TotalQuantitySold,\n  SUM(OD.UnitPrice * OD.Quantity * (1 - OD.Discount)) AS TotalRevenue\nFROM \"Order Details\" AS OD\nJOIN Products AS P\n  ON OD.ProductID = P.ProductID\nJOIN Orders AS O\n  ON OD.OrderID = O.OrderID\nGROUP BY\n  P.ProductName,\n  O.ShipCountry\nORDER BY\n  O.ShipCountry,\n  P.ProductName;"
+    },
+    {
+      "id": "top_countries_by_sales_chart",
+      "title": "Top Countries by Total Product Sales Value",
+      "type": "chart",
+      "description": "Bar chart showing countries ranked by their total sales value across all products.",
+      "sql": "SELECT\n  O.ShipCountry,\n  SUM(OD.UnitPrice * OD.Quantity * (1 - OD.Discount)) AS TotalSalesValue\nFROM \"Order Details\" AS OD\nJOIN Orders AS O\n  ON OD.OrderID = O.OrderID\nGROUP BY\n  O.ShipCountry\nORDER BY\n  TotalSalesValue DESC;"
+    },
+    {
+      "id": "top_products_by_country_chart",
+      "title": "Top Products by Sales Value (Per Country)",
+      "type": "chart",
+      "description": "Bar chart displaying the top-selling products based on sales value, with an option to filter by country.",
+      "sql": "SELECT\n  P.ProductName,\n  O.ShipCountry,\n  SUM(OD.UnitPrice * OD.Quantity * (1 - OD.Discount)) AS TotalSalesValue\nFROM \"Order Details\" AS OD\nJOIN Products AS P\n  ON OD.ProductID = P.ProductID\nJOIN Orders AS O\n  ON OD.OrderID = O.OrderID\nGROUP BY\n  P.ProductName,\n  O.ShipCountry\nORDER BY\n  O.ShipCountry,\n  TotalSalesValue DESC;"
+    },
+    {
+      "id": "country_filter",
+      "title": "Country Selector",
+      "type": "filter",
+      "description": "Allows users to filter the dashboard data by specific shipping countries.",
+      "sql": "SELECT DISTINCT\n  ShipCountry\nFROM Orders\nORDER BY\n  ShipCountry;"
+    },
+    {
+      "id": "product_category_filter",
+      "title": "Product Category Selector",
+      "type": "filter",
+      "description": "Allows users to filter the dashboard data by product categories.",
+      "sql": "SELECT DISTINCT\n  CategoryName\nFROM Categories\nORDER BY\n  CategoryName;"
+    }
+  ],
+  "timestamp": "2026-07-12T17:43:11.431735"
+}
