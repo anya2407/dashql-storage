@@ -1,0 +1,102 @@
+{
+  "dashboard_id": "dashboard_93a2da81",
+  "request": "orders of germnay",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Total Orders from Germany",
+      "type": "kpi"
+    },
+    {
+      "id": "component_2",
+      "title": "Total Sales from Germany",
+      "type": "kpi"
+    },
+    {
+      "id": "component_3",
+      "title": "Monthly Sales Trend in Germany",
+      "type": "chart",
+      "chart_type": "line",
+      "x": "SalesMonth",
+      "y": "MonthlySales"
+    },
+    {
+      "id": "component_4",
+      "title": "Top Products Sold in Germany",
+      "type": "table"
+    },
+    {
+      "id": "component_5",
+      "title": "Top Customers in Germany",
+      "type": "table"
+    },
+    {
+      "id": "component_6",
+      "title": "Orders by German City",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "ShipCity",
+      "y": "NumberOfOrders"
+    },
+    {
+      "id": "component_7",
+      "title": "Shipping Methods for German Orders",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "ShipperName",
+      "y": "NumberOfOrders"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Total Orders from Germany",
+      "type": "kpi",
+      "description": "Total number of orders shipped to Germany",
+      "sql": "SELECT COUNT(OrderID) FROM Orders WHERE ShipCountry = 'Germany';"
+    },
+    {
+      "id": "component_2",
+      "title": "Total Sales from Germany",
+      "type": "kpi",
+      "description": "Total revenue generated from orders shipped to Germany",
+      "sql": "SELECT SUM(OD.UnitPrice * OD.Quantity * (1 - OD.Discount)) FROM Orders AS O JOIN \"Order Details\" AS OD ON O.OrderID = OD.OrderID WHERE O.ShipCountry = 'Germany';"
+    },
+    {
+      "id": "component_3",
+      "title": "Monthly Sales Trend in Germany",
+      "type": "chart",
+      "description": "Monthly sales trend for orders shipped to Germany",
+      "sql": "SELECT strftime('%Y-%m', O.OrderDate) AS SalesMonth, SUM(OD.UnitPrice * OD.Quantity * (1 - OD.Discount)) AS MonthlySales FROM Orders AS O JOIN \"Order Details\" AS OD ON O.OrderID = OD.OrderID WHERE O.ShipCountry = 'Germany' GROUP BY SalesMonth ORDER BY SalesMonth;"
+    },
+    {
+      "id": "component_4",
+      "title": "Top Products Sold in Germany",
+      "type": "table",
+      "description": "List of top-selling products in Germany by sales value",
+      "sql": "SELECT P.ProductName, SUM(OD.UnitPrice * OD.Quantity * (1 - OD.Discount)) AS TotalSalesValue FROM Orders AS O JOIN \"Order Details\" AS OD ON O.OrderID = OD.OrderID JOIN Products AS P ON OD.ProductID = P.ProductID WHERE O.ShipCountry = 'Germany' GROUP BY P.ProductName ORDER BY TotalSalesValue DESC LIMIT 10;"
+    },
+    {
+      "id": "component_5",
+      "title": "Top Customers in Germany",
+      "type": "table",
+      "description": "List of customers in Germany with the highest total order value",
+      "sql": "SELECT C.CompanyName, SUM(OD.UnitPrice * OD.Quantity * (1 - OD.Discount)) AS TotalOrderValue FROM Orders AS O JOIN \"Order Details\" AS OD ON O.OrderID = OD.OrderID JOIN Customers AS C ON O.CustomerID = C.CustomerID WHERE O.ShipCountry = 'Germany' GROUP BY C.CompanyName ORDER BY TotalOrderValue DESC LIMIT 10;"
+    },
+    {
+      "id": "component_6",
+      "title": "Orders by German City",
+      "type": "chart",
+      "description": "Distribution of orders across different cities within Germany",
+      "sql": "SELECT ShipCity, COUNT(OrderID) AS NumberOfOrders FROM Orders WHERE ShipCountry = 'Germany' GROUP BY ShipCity ORDER BY NumberOfOrders DESC;"
+    },
+    {
+      "id": "component_7",
+      "title": "Shipping Methods for German Orders",
+      "type": "chart",
+      "description": "Breakdown of shipping methods used for orders to Germany",
+      "sql": "SELECT S.CompanyName AS ShipperName, COUNT(O.OrderID) AS NumberOfOrders FROM Orders AS O JOIN Shippers AS S ON O.ShipVia = S.ShipperID WHERE O.ShipCountry = 'Germany' GROUP BY S.CompanyName ORDER BY NumberOfOrders DESC;"
+    }
+  ],
+  "timestamp": "2026-07-12T17:33:34.551351"
+}
