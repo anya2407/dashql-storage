@@ -1,0 +1,49 @@
+{
+  "dashboard_id": "dashboard_653197b2",
+  "request": "Orders by employee.",
+  "search_document": "User Request: Orders by employee.\n\nDashboard Components:\nTitle: Orders by Employee\nType: chart\nDescription: Total orders processed by each employee\nTitle: Employee Performance\nType: table\nDescription: List of employees with their total orders and revenue generated\nTitle: Total Orders\nType: kpi\nDescription: Overall number of orders processed",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Orders by Employee",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "EmployeeName",
+      "y": "TotalOrders"
+    },
+    {
+      "id": "component_2",
+      "title": "Employee Performance",
+      "type": "table"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Orders",
+      "type": "kpi"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Orders by Employee",
+      "type": "chart",
+      "description": "Total orders processed by each employee",
+      "sql": "SELECT e.EmployeeID, e.FirstName || ' ' || e.LastName AS EmployeeName, COUNT(o.OrderID) AS TotalOrders FROM Employees e LEFT JOIN Orders o ON e.EmployeeID = o.EmployeeID GROUP BY e.EmployeeID, EmployeeName ORDER BY TotalOrders DESC"
+    },
+    {
+      "id": "component_2",
+      "title": "Employee Performance",
+      "type": "table",
+      "description": "List of employees with their total orders and revenue generated",
+      "sql": "SELECT e.EmployeeID, e.FirstName || ' ' || e.LastName AS EmployeeName, COUNT(o.OrderID) AS TotalOrders, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalRevenue FROM Employees e LEFT JOIN Orders o ON e.EmployeeID = o.EmployeeID LEFT JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY e.EmployeeID, EmployeeName ORDER BY TotalRevenue DESC"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Orders",
+      "type": "kpi",
+      "description": "Overall number of orders processed",
+      "sql": "SELECT COUNT(OrderID) AS TotalOrders FROM Orders"
+    }
+  ],
+  "timestamp": "2026-07-14T02:23:33.252419"
+}
