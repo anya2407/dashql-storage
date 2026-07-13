@@ -1,0 +1,95 @@
+{
+  "dashboard_id": "dashboard_27de6277",
+  "request": "Low stock products.",
+  "search_document": "User Request: Low stock products.\n\nDashboard Components:\nTitle: Low Stock Products\nType: table\nDescription: List of products with stock below reorder level\nTitle: Low Stock by Category\nType: chart\nDescription: Distribution of low stock products across categories\nTitle: Total Low Stock Products\nType: kpi\nDescription: Count of products currently in low stock",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Low Stock Products",
+      "type": "table",
+      "columns": [
+        "ProductID",
+        "ProductName",
+        "UnitsInStock",
+        "ReorderLevel"
+      ],
+      "sample_data": [
+        {
+          "ProductID": 2,
+          "ProductName": "Chang",
+          "UnitsInStock": 17,
+          "ReorderLevel": 25
+        },
+        {
+          "ProductID": 3,
+          "ProductName": "Aniseed Syrup",
+          "UnitsInStock": 13,
+          "ReorderLevel": 25
+        },
+        {
+          "ProductID": 11,
+          "ProductName": "Queso Cabrales",
+          "UnitsInStock": 22,
+          "ReorderLevel": 30
+        },
+        {
+          "ProductID": 21,
+          "ProductName": "Sir Rodney's Scones",
+          "UnitsInStock": 3,
+          "ReorderLevel": 5
+        },
+        {
+          "ProductID": 30,
+          "ProductName": "Nord-Ost Matjeshering",
+          "UnitsInStock": 10,
+          "ReorderLevel": 15
+        }
+      ]
+    },
+    {
+      "id": "component_2",
+      "title": "Low Stock by Category",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "CategoryName",
+      "y": "LowStockCount"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Low Stock Products",
+      "type": "kpi",
+      "columns": [
+        "TotalLowStockProducts"
+      ],
+      "sample_data": [
+        {
+          "TotalLowStockProducts": 18
+        }
+      ]
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Low Stock Products",
+      "type": "table",
+      "description": "List of products with stock below reorder level",
+      "sql": "SELECT ProductID, ProductName, UnitsInStock, ReorderLevel FROM Products WHERE UnitsInStock < ReorderLevel"
+    },
+    {
+      "id": "component_2",
+      "title": "Low Stock by Category",
+      "type": "chart",
+      "description": "Distribution of low stock products across categories",
+      "sql": "SELECT c.CategoryName, COUNT(p.ProductID) AS LowStockCount FROM Products p JOIN Categories c ON p.CategoryID = c.CategoryID WHERE p.UnitsInStock < p.ReorderLevel GROUP BY c.CategoryName"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Low Stock Products",
+      "type": "kpi",
+      "description": "Count of products currently in low stock",
+      "sql": "SELECT COUNT(ProductID) AS TotalLowStockProducts FROM Products WHERE UnitsInStock < ReorderLevel"
+    }
+  ],
+  "timestamp": "2026-07-14T03:53:52.593218"
+}
