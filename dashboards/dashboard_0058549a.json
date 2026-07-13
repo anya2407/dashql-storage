@@ -1,0 +1,76 @@
+{
+  "dashboard_id": "dashboard_0058549a",
+  "request": "Show quarterly sales.",
+  "search_document": "User Request: Show quarterly sales.\n\nDashboard Components:\nTitle: Quarterly Revenue\nType: chart\nDescription: Quarterly revenue trend\nTitle: Top Products by Sales\nType: table\nDescription: Products with the highest sales in the quarter\nTitle: Total Quarterly Revenue\nType: kpi\nDescription: Total revenue generated in the quarter\nTitle: Sales by Region\nType: chart\nDescription: Revenue distribution across different regions\nTitle: Sales Growth Rate\nType: kpi\nDescription: Percentage growth in sales compared to the previous quarter",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Quarterly Revenue",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "Quarter",
+      "y": "Revenue"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Products by Sales",
+      "type": "table"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Quarterly Revenue",
+      "type": "kpi"
+    },
+    {
+      "id": "component_4",
+      "title": "Sales by Region",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "Region",
+      "y": "Sales"
+    },
+    {
+      "id": "component_5",
+      "title": "Sales Growth Rate",
+      "type": "kpi"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Quarterly Revenue",
+      "type": "chart",
+      "description": "Quarterly revenue trend",
+      "sql": "SELECT strftime('%Y-Q%q', OrderDate) AS Quarter, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS Revenue FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY Quarter ORDER BY Quarter"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Products by Sales",
+      "type": "table",
+      "description": "Products with the highest sales in the quarter",
+      "sql": "SELECT p.ProductName, SUM(od.Quantity) AS TotalQuantity, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalSales FROM \"Order Details\" od JOIN Products p ON od.ProductID = p.ProductID JOIN Orders o ON od.OrderID = o.OrderID WHERE strftime('%Y-Q%q', o.OrderDate) = strftime('%Y-Q%q', date('now')) GROUP BY p.ProductID ORDER BY TotalSales DESC LIMIT 10"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Quarterly Revenue",
+      "type": "kpi",
+      "description": "Total revenue generated in the quarter",
+      "sql": "SELECT SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalRevenue FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID WHERE strftime('%Y-Q%q', o.OrderDate) = strftime('%Y-Q%q', date('now'))"
+    },
+    {
+      "id": "component_4",
+      "title": "Sales by Region",
+      "type": "chart",
+      "description": "Revenue distribution across different regions",
+      "sql": "SELECT o.ShipRegion, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS Revenue FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID WHERE strftime('%Y-Q%q', o.OrderDate) = strftime('%Y-Q%q', date('now')) GROUP BY o.ShipRegion ORDER BY Revenue DESC"
+    },
+    {
+      "id": "component_5",
+      "title": "Sales Growth Rate",
+      "type": "kpi",
+      "description": "Percentage growth in sales compared to the previous quarter",
+      "sql": "WITH CurrentQuarter AS (SELECT SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS Revenue FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID WHERE strftime('%Y-Q%q', o.OrderDate) = strftime('%Y-Q%q', date('now'))), PreviousQuarter AS (SELECT SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS Revenue FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID WHERE strftime('%Y-Q%q', o.OrderDate) = strftime('%Y-Q%q', date('now', '-3 months'))) SELECT ((CurrentQuarter.Revenue - PreviousQuarter.Revenue) / PreviousQuarter.Revenue) * 100 AS GrowthRate FROM CurrentQuarter, PreviousQuarter"
+    }
+  ],
+  "timestamp": "2026-07-14T03:45:56.938852"
+}
