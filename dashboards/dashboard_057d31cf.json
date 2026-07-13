@@ -1,0 +1,49 @@
+{
+  "dashboard_id": "dashboard_057d31cf",
+  "request": "Customers by region.",
+  "search_document": "User Request: Customers by region.\n\nDashboard Components:\nTitle: Customers by Region\nType: chart\nDescription: Distribution of customers across different regions\nTitle: Customer Demographics\nType: table\nDescription: Summary of customer types and their counts by region\nTitle: Total Customers\nType: kpi\nDescription: Total number of customers",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Customers by Region",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "Region",
+      "y": "CustomerCount"
+    },
+    {
+      "id": "component_2",
+      "title": "Customer Demographics",
+      "type": "table"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Customers",
+      "type": "kpi"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Customers by Region",
+      "type": "chart",
+      "description": "Distribution of customers across different regions",
+      "sql": "SELECT \"Region\", COUNT(\"CustomerID\") AS \"CustomerCount\" FROM \"Customers\" GROUP BY \"Region\""
+    },
+    {
+      "id": "component_2",
+      "title": "Customer Demographics",
+      "type": "table",
+      "description": "Summary of customer types and their counts by region",
+      "sql": "SELECT cd.\"CustomerTypeID\", cd.\"CustomerDesc\", c.\"Region\", COUNT(ccd.\"CustomerID\") AS \"CustomerCount\" FROM \"CustomerDemographics\" cd JOIN \"CustomerCustomerDemo\" ccd ON cd.\"CustomerTypeID\" = ccd.\"CustomerTypeID\" JOIN \"Customers\" c ON ccd.\"CustomerID\" = c.\"CustomerID\" GROUP BY cd.\"CustomerTypeID\", c.\"Region\""
+    },
+    {
+      "id": "component_3",
+      "title": "Total Customers",
+      "type": "kpi",
+      "description": "Total number of customers",
+      "sql": "SELECT COUNT(\"CustomerID\") AS \"TotalCustomers\" FROM \"Customers\""
+    }
+  ],
+  "timestamp": "2026-07-14T03:15:36.374878"
+}
