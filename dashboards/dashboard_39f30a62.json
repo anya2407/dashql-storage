@@ -1,0 +1,187 @@
+{
+  "dashboard_id": "dashboard_39f30a62",
+  "request": "Give me a full business overview.",
+  "search_document": "User Request: Give me a full business overview.\n\nDashboard Components:\nTitle: Monthly Revenue\nType: chart\nDescription: Monthly revenue trend\nTitle: Top Customers by Region\nType: table\nDescription: Highest spending customers aggregated by region\nTitle: Total Revenue\nType: kpi\nDescription: Overall revenue\nTitle: Sales by Product Category\nType: chart\nDescription: Revenue distribution across product categories\nTitle: Order Volume\nType: chart\nDescription: Total number of orders over time\nTitle: Customer Demographics\nType: chart\nDescription: Distribution of customers by type\nTitle: Employee Performance\nType: table\nDescription: Sales performance by employee\nTitle: Shipping Performance\nType: chart\nDescription: Average shipping time and costs",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Monthly Revenue",
+      "type": "chart",
+      "chart_type": "line",
+      "x": "Month",
+      "y": "Revenue"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Customers by Region",
+      "type": "table",
+      "columns": [
+        "Region",
+        "CompanyName",
+        "TotalSpent"
+      ],
+      "sample_data": [
+        {
+          "Region": null,
+          "CompanyName": "IT",
+          "TotalSpent": 9745371.29
+        },
+        {
+          "Region": "British Isles",
+          "CompanyName": "B's Beverages",
+          "TotalSpent": 6154115.34
+        },
+        {
+          "Region": "British Isles",
+          "CompanyName": "Consolidated Holdings",
+          "TotalSpent": 4931207.19
+        },
+        {
+          "Region": "British Isles",
+          "CompanyName": "Island Trading",
+          "TotalSpent": 4885549.18
+        },
+        {
+          "Region": "British Isles",
+          "CompanyName": "Seven Seas Imports",
+          "TotalSpent": 4749839.215
+        }
+      ]
+    },
+    {
+      "id": "component_3",
+      "title": "Total Revenue",
+      "type": "kpi",
+      "columns": [
+        "TotalRevenue"
+      ],
+      "sample_data": [
+        {
+          "TotalRevenue": 448386633.1695
+        }
+      ]
+    },
+    {
+      "id": "component_4",
+      "title": "Sales by Product Category",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "CategoryName",
+      "y": "Revenue"
+    },
+    {
+      "id": "component_5",
+      "title": "Order Volume",
+      "type": "chart",
+      "chart_type": "line",
+      "x": "Month",
+      "y": "OrderCount"
+    },
+    {
+      "id": "component_6",
+      "title": "Customer Demographics",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": null,
+      "y": null
+    },
+    {
+      "id": "component_7",
+      "title": "Employee Performance",
+      "type": "table",
+      "columns": [
+        "EmployeeName",
+        "TotalSales"
+      ],
+      "sample_data": [
+        {
+          "EmployeeName": "Margaret Peacock",
+          "TotalSales": 51488395.196
+        },
+        {
+          "EmployeeName": "Steven Buchanan",
+          "TotalSales": 51386459.1025
+        },
+        {
+          "EmployeeName": "Janet Leverling",
+          "TotalSales": 50445573.763
+        },
+        {
+          "EmployeeName": "Nancy Davolio",
+          "TotalSales": 49659423.2345
+        },
+        {
+          "EmployeeName": "Robert King",
+          "TotalSales": 49651899.305
+        }
+      ]
+    },
+    {
+      "id": "component_8",
+      "title": "Shipping Performance",
+      "type": "chart",
+      "chart_type": "scatter",
+      "x": "AvgShippingTime",
+      "y": "AvgFreight"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Monthly Revenue",
+      "type": "chart",
+      "description": "Monthly revenue trend",
+      "sql": "SELECT strftime('%Y-%m', OrderDate) AS Month, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS Revenue FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY Month ORDER BY Month"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Customers by Region",
+      "type": "table",
+      "description": "Highest spending customers aggregated by region",
+      "sql": "SELECT c.Region, c.CompanyName, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalSpent FROM Orders o JOIN Customers c ON o.CustomerID = c.CustomerID JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY c.Region, c.CompanyName ORDER BY c.Region, TotalSpent DESC"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Revenue",
+      "type": "kpi",
+      "description": "Overall revenue",
+      "sql": "SELECT SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalRevenue FROM \"Order Details\" od"
+    },
+    {
+      "id": "component_4",
+      "title": "Sales by Product Category",
+      "type": "chart",
+      "description": "Revenue distribution across product categories",
+      "sql": "SELECT cat.CategoryName, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS Revenue FROM \"Order Details\" od JOIN Products p ON od.ProductID = p.ProductID JOIN Categories cat ON p.CategoryID = cat.CategoryID GROUP BY cat.CategoryName ORDER BY Revenue DESC"
+    },
+    {
+      "id": "component_5",
+      "title": "Order Volume",
+      "type": "chart",
+      "description": "Total number of orders over time",
+      "sql": "SELECT strftime('%Y-%m', OrderDate) AS Month, COUNT(OrderID) AS OrderCount FROM Orders GROUP BY Month ORDER BY Month"
+    },
+    {
+      "id": "component_6",
+      "title": "Customer Demographics",
+      "type": "chart",
+      "description": "Distribution of customers by type",
+      "sql": "SELECT cd.CustomerDesc, COUNT(ccd.CustomerID) AS CustomerCount FROM CustomerDemographics cd JOIN CustomerCustomerDemo ccd ON cd.CustomerTypeID = ccd.CustomerTypeID GROUP BY cd.CustomerDesc"
+    },
+    {
+      "id": "component_7",
+      "title": "Employee Performance",
+      "type": "table",
+      "description": "Sales performance by employee",
+      "sql": "SELECT e.FirstName || ' ' || e.LastName AS EmployeeName, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalSales FROM Orders o JOIN Employees e ON o.EmployeeID = e.EmployeeID JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY e.EmployeeID ORDER BY TotalSales DESC"
+    },
+    {
+      "id": "component_8",
+      "title": "Shipping Performance",
+      "type": "chart",
+      "description": "Average shipping time and costs",
+      "sql": "SELECT s.CompanyName, AVG(julianday(o.ShippedDate) - julianday(o.OrderDate)) AS AvgShippingTime, AVG(o.Freight) AS AvgFreight FROM Orders o JOIN Shippers s ON o.ShipVia = s.ShipperID GROUP BY s.CompanyName ORDER BY AvgShippingTime"
+    }
+  ],
+  "timestamp": "2026-07-14T01:34:46.005600"
+}
