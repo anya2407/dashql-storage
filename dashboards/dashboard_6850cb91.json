@@ -1,0 +1,82 @@
+{
+  "dashboard_id": "dashboard_6850cb91",
+  "request": "Customer overview.",
+  "search_document": "User Request: Customer overview.\n\nDashboard Components:\nTitle: Monthly Revenue\nType: chart\nDescription: Monthly revenue trend\nTitle: Customers by Region\nType: chart\nDescription: Distribution of customers across different regions\nTitle: Total Revenue\nType: kpi\nDescription: Overall revenue from all customers\nTitle: Customer Demographics\nType: chart\nDescription: Breakdown of customers by type\nTitle: Order Trends\nType: chart\nDescription: Trends in customer orders over time",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Monthly Revenue",
+      "type": "chart",
+      "chart_type": "line",
+      "x": "Month",
+      "y": "Revenue"
+    },
+    {
+      "id": "component_2",
+      "title": "Customers by Region",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "Region",
+      "y": "CustomerCount"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Revenue",
+      "type": "kpi"
+    },
+    {
+      "id": "component_4",
+      "title": "Customer Demographics",
+      "type": "chart",
+      "chart_type": "pie",
+      "x": null,
+      "y": null
+    },
+    {
+      "id": "component_5",
+      "title": "Order Trends",
+      "type": "chart",
+      "chart_type": "line",
+      "x": "Month",
+      "y": "OrderCount"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Monthly Revenue",
+      "type": "chart",
+      "description": "Monthly revenue trend",
+      "sql": "SELECT strftime('%Y-%m', OrderDate) AS Month, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS Revenue FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY Month ORDER BY Month"
+    },
+    {
+      "id": "component_2",
+      "title": "Customers by Region",
+      "type": "chart",
+      "description": "Distribution of customers across different regions",
+      "sql": "SELECT Region, COUNT(CustomerID) AS CustomerCount FROM Customers GROUP BY Region ORDER BY CustomerCount DESC"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Revenue",
+      "type": "kpi",
+      "description": "Overall revenue from all customers",
+      "sql": "SELECT SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalRevenue FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID"
+    },
+    {
+      "id": "component_4",
+      "title": "Customer Demographics",
+      "type": "chart",
+      "description": "Breakdown of customers by type",
+      "sql": "SELECT cd.CustomerDesc, COUNT(ccd.CustomerID) AS CustomerCount FROM CustomerDemographics cd JOIN CustomerCustomerDemo ccd ON cd.CustomerTypeID = ccd.CustomerTypeID GROUP BY cd.CustomerDesc ORDER BY CustomerCount DESC"
+    },
+    {
+      "id": "component_5",
+      "title": "Order Trends",
+      "type": "chart",
+      "description": "Trends in customer orders over time",
+      "sql": "SELECT strftime('%Y-%m', OrderDate) AS Month, COUNT(OrderID) AS OrderCount FROM Orders GROUP BY Month ORDER BY Month"
+    }
+  ],
+  "timestamp": "2026-07-14T01:27:58.736645"
+}
