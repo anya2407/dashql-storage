@@ -1,0 +1,49 @@
+{
+  "dashboard_id": "dashboard_73151713",
+  "request": "Revenue by region.",
+  "search_document": "User Request: Revenue by region.\n\nDashboard Components:\nTitle: Revenue by Region\nType: chart\nDescription: Revenue distribution across different regions\nTitle: Top Regions by Revenue\nType: table\nDescription: Regions generating the highest revenue\nTitle: Total Revenue\nType: kpi\nDescription: Overall revenue across all regions",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Revenue by Region",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "Region",
+      "y": "Revenue"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Regions by Revenue",
+      "type": "table"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Revenue",
+      "type": "kpi"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Revenue by Region",
+      "type": "chart",
+      "description": "Revenue distribution across different regions",
+      "sql": "SELECT e.Region, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS Revenue FROM Orders o JOIN [Order Details] od ON o.OrderID = od.OrderID JOIN Employees e ON o.EmployeeID = e.EmployeeID GROUP BY e.Region"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Regions by Revenue",
+      "type": "table",
+      "description": "Regions generating the highest revenue",
+      "sql": "SELECT e.Region, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS Revenue FROM Orders o JOIN [Order Details] od ON o.OrderID = od.OrderID JOIN Employees e ON o.EmployeeID = e.EmployeeID GROUP BY e.Region ORDER BY Revenue DESC LIMIT 5"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Revenue",
+      "type": "kpi",
+      "description": "Overall revenue across all regions",
+      "sql": "SELECT SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalRevenue FROM Orders o JOIN [Order Details] od ON o.OrderID = od.OrderID"
+    }
+  ],
+  "timestamp": "2026-07-14T03:11:50.392952"
+}
