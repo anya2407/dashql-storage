@@ -1,0 +1,48 @@
+{
+  "dashboard_id": "dashboard_865aa1f9",
+  "request": "share region wise details for all customers ",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Customers by Region",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "Region",
+      "y": "CustomerCount"
+    },
+    {
+      "id": "component_2",
+      "title": "Customer Count by Region",
+      "type": "table"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Customers",
+      "type": "kpi"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Customers by Region",
+      "type": "chart",
+      "description": "Distribution of customers across different regions",
+      "sql": "SELECT Region, COUNT(CustomerID) AS CustomerCount FROM Customers GROUP BY Region"
+    },
+    {
+      "id": "component_2",
+      "title": "Customer Count by Region",
+      "type": "table",
+      "description": "Number of customers in each region",
+      "sql": "SELECT Region, COUNT(CustomerID) AS CustomerCount FROM Customers GROUP BY Region"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Customers",
+      "type": "kpi",
+      "description": "Overall number of customers",
+      "sql": "SELECT COUNT(CustomerID) AS TotalCustomers FROM Customers"
+    }
+  ],
+  "timestamp": "2026-07-13T16:44:33.088713"
+}
