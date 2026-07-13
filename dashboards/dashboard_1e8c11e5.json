@@ -1,0 +1,76 @@
+{
+  "dashboard_id": "dashboard_1e8c11e5",
+  "request": "Customer statistics.",
+  "search_document": "User Request: Customer statistics.\n\nDashboard Components:\nTitle: Monthly Revenue\nType: chart\nDescription: Monthly revenue trend\nTitle: Customer Distribution by Region\nType: chart\nDescription: Number of customers segmented by region\nTitle: Total Customers\nType: kpi\nDescription: Total number of customers\nTitle: Customer Types\nType: pie_chart\nDescription: Distribution of customers by type\nTitle: Average Order Value\nType: kpi\nDescription: Average revenue per order",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Monthly Revenue",
+      "type": "chart",
+      "chart_type": "line",
+      "x": "Month",
+      "y": "Revenue"
+    },
+    {
+      "id": "component_2",
+      "title": "Customer Distribution by Region",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "Region",
+      "y": "CustomerCount"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Customers",
+      "type": "kpi"
+    },
+    {
+      "id": "component_4",
+      "title": "Customer Types",
+      "type": "pie_chart"
+    },
+    {
+      "id": "component_5",
+      "title": "Average Order Value",
+      "type": "kpi"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Monthly Revenue",
+      "type": "chart",
+      "description": "Monthly revenue trend",
+      "sql": "SELECT strftime('%Y-%m', OrderDate) AS Month, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS Revenue FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY Month ORDER BY Month"
+    },
+    {
+      "id": "component_2",
+      "title": "Customer Distribution by Region",
+      "type": "chart",
+      "description": "Number of customers segmented by region",
+      "sql": "SELECT Region, COUNT(CustomerID) AS CustomerCount FROM Customers GROUP BY Region"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Customers",
+      "type": "kpi",
+      "description": "Total number of customers",
+      "sql": "SELECT COUNT(CustomerID) AS TotalCustomers FROM Customers"
+    },
+    {
+      "id": "component_4",
+      "title": "Customer Types",
+      "type": "pie_chart",
+      "description": "Distribution of customers by type",
+      "sql": "SELECT cd.CustomerDesc, COUNT(ccd.CustomerID) AS CustomerCount FROM CustomerDemographics cd JOIN CustomerCustomerDemo ccd ON cd.CustomerTypeID = ccd.CustomerTypeID GROUP BY cd.CustomerDesc"
+    },
+    {
+      "id": "component_5",
+      "title": "Average Order Value",
+      "type": "kpi",
+      "description": "Average revenue per order",
+      "sql": "SELECT AVG(TotalOrderValue) AS AverageOrderValue FROM (SELECT o.OrderID, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalOrderValue FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY o.OrderID)"
+    }
+  ],
+  "timestamp": "2026-07-14T03:51:32.610900"
+}
