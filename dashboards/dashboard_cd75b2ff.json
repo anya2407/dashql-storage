@@ -1,0 +1,82 @@
+{
+  "dashboard_id": "dashboard_cd75b2ff",
+  "request": "Create a sales dashboard with total revenue, top 10 customers by order count, and monthly order trends",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Monthly Revenue",
+      "type": "chart",
+      "chart_type": "line",
+      "x": "Month",
+      "y": "Revenue"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Customers by Order Count",
+      "type": "table",
+      "columns": [
+        "CompanyName",
+        "OrderCount"
+      ],
+      "sample_data": [
+        {
+          "CompanyName": "IT",
+          "OrderCount": 335
+        },
+        {
+          "CompanyName": "B's Beverages",
+          "OrderCount": 210
+        },
+        {
+          "CompanyName": "Ricardo Adocicados",
+          "OrderCount": 203
+        },
+        {
+          "CompanyName": "LILA-Supermercado",
+          "OrderCount": 203
+        },
+        {
+          "CompanyName": "Gourmet Lanchonetes",
+          "OrderCount": 202
+        }
+      ]
+    },
+    {
+      "id": "component_3",
+      "title": "Total Revenue",
+      "type": "kpi",
+      "columns": [
+        "TotalRevenue"
+      ],
+      "sample_data": [
+        {
+          "TotalRevenue": 448386633.1695
+        }
+      ]
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Monthly Revenue",
+      "type": "chart",
+      "description": "Monthly revenue trend",
+      "sql": "SELECT strftime('%Y-%m', OrderDate) AS Month, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS Revenue FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY Month ORDER BY Month"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Customers by Order Count",
+      "type": "table",
+      "description": "Top 10 customers based on the number of orders",
+      "sql": "SELECT c.CompanyName, COUNT(o.OrderID) AS OrderCount FROM Customers c JOIN Orders o ON c.CustomerID = o.CustomerID GROUP BY c.CompanyName ORDER BY OrderCount DESC LIMIT 10"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Revenue",
+      "type": "kpi",
+      "description": "Overall revenue generated",
+      "sql": "SELECT SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalRevenue FROM \"Order Details\" od"
+    }
+  ],
+  "timestamp": "2026-07-13T16:38:01.943553"
+}
