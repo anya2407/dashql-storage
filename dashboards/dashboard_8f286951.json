@@ -1,0 +1,89 @@
+{
+  "dashboard_id": "dashboard_8f286951",
+  "request": "Average order value by month.",
+  "search_document": "User Request: Average order value by month.\n\nDashboard Components:\nTitle: Average Order Value by Month\nType: chart\nDescription: Trend of average order value over the months\nTitle: Top Customers by Revenue\nType: table\nDescription: List of customers with the highest total revenue\nTitle: Total Revenue\nType: kpi\nDescription: Overall revenue generated",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Average Order Value by Month",
+      "type": "chart",
+      "chart_type": "line",
+      "x": "OrderMonth",
+      "y": "AverageOrderValue"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Customers by Revenue",
+      "type": "table",
+      "columns": [
+        "CustomerID",
+        "CompanyName",
+        "TotalRevenue"
+      ],
+      "sample_data": [
+        {
+          "CustomerID": "BSBEV",
+          "CompanyName": "B's Beverages",
+          "TotalRevenue": 6154115.34
+        },
+        {
+          "CustomerID": "HUNGC",
+          "CompanyName": "Hungry Coyote Import Store",
+          "TotalRevenue": 5698023.67
+        },
+        {
+          "CustomerID": "RANCH",
+          "CompanyName": "Rancho grande",
+          "TotalRevenue": 5559110.08
+        },
+        {
+          "CustomerID": "GOURL",
+          "CompanyName": "Gourmet Lanchonetes",
+          "TotalRevenue": 5552309.805
+        },
+        {
+          "CustomerID": "ANATR",
+          "CompanyName": "Ana Trujillo Emparedados y helados",
+          "TotalRevenue": 5534356.65
+        }
+      ]
+    },
+    {
+      "id": "component_3",
+      "title": "Total Revenue",
+      "type": "kpi",
+      "columns": [
+        "TotalRevenue"
+      ],
+      "sample_data": [
+        {
+          "TotalRevenue": 448386633.1695
+        }
+      ]
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Average Order Value by Month",
+      "type": "chart",
+      "description": "Trend of average order value over the months",
+      "sql": "SELECT strftime('%Y-%m', OrderDate) AS OrderMonth, AVG((od.UnitPrice * od.Quantity) * (1 - od.Discount)) AS AverageOrderValue FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY OrderMonth ORDER BY OrderMonth"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Customers by Revenue",
+      "type": "table",
+      "description": "List of customers with the highest total revenue",
+      "sql": "SELECT c.CustomerID, c.CompanyName, SUM((od.UnitPrice * od.Quantity) * (1 - od.Discount)) AS TotalRevenue FROM Customers c JOIN Orders o ON c.CustomerID = o.CustomerID JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY c.CustomerID, c.CompanyName ORDER BY TotalRevenue DESC LIMIT 10"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Revenue",
+      "type": "kpi",
+      "description": "Overall revenue generated",
+      "sql": "SELECT SUM((od.UnitPrice * od.Quantity) * (1 - od.Discount)) AS TotalRevenue FROM \"Order Details\" od"
+    }
+  ],
+  "timestamp": "2026-07-14T02:22:23.612145"
+}
