@@ -1,0 +1,83 @@
+{
+  "dashboard_id": "dashboard_cf205254",
+  "request": "Daily order count.",
+  "search_document": "User Request: Daily order count.\n\nDashboard Components:\nTitle: Daily Order Count\nType: chart\nDescription: Trend of orders placed daily\nTitle: Orders by Region\nType: table\nDescription: Count of orders segmented by region\nTitle: Total Orders\nType: kpi\nDescription: Total number of orders placed",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Daily Order Count",
+      "type": "chart",
+      "chart_type": "line",
+      "x": "OrderDate",
+      "y": "OrderCount"
+    },
+    {
+      "id": "component_2",
+      "title": "Orders by Region",
+      "type": "table",
+      "columns": [
+        "ShipRegion",
+        "OrderCount"
+      ],
+      "sample_data": [
+        {
+          "ShipRegion": "Western Europe",
+          "OrderCount": 5056
+        },
+        {
+          "ShipRegion": "South America",
+          "OrderCount": 2925
+        },
+        {
+          "ShipRegion": "North America",
+          "OrderCount": 2875
+        },
+        {
+          "ShipRegion": "Southern Europe",
+          "OrderCount": 1586
+        },
+        {
+          "ShipRegion": "British Isles",
+          "OrderCount": 1452
+        }
+      ]
+    },
+    {
+      "id": "component_3",
+      "title": "Total Orders",
+      "type": "kpi",
+      "columns": [
+        "TotalOrders"
+      ],
+      "sample_data": [
+        {
+          "TotalOrders": 16282
+        }
+      ]
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Daily Order Count",
+      "type": "chart",
+      "description": "Trend of orders placed daily",
+      "sql": "SELECT DATE(OrderDate) AS OrderDate, COUNT(OrderID) AS OrderCount FROM Orders GROUP BY DATE(OrderDate) ORDER BY OrderDate"
+    },
+    {
+      "id": "component_2",
+      "title": "Orders by Region",
+      "type": "table",
+      "description": "Count of orders segmented by region",
+      "sql": "SELECT ShipRegion, COUNT(OrderID) AS OrderCount FROM Orders GROUP BY ShipRegion ORDER BY OrderCount DESC"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Orders",
+      "type": "kpi",
+      "description": "Total number of orders placed",
+      "sql": "SELECT COUNT(OrderID) AS TotalOrders FROM Orders"
+    }
+  ],
+  "timestamp": "2026-07-14T03:48:42.986348"
+}
