@@ -1,0 +1,95 @@
+{
+  "dashboard_id": "dashboard_db0b3dc0",
+  "request": "Largest orders.",
+  "search_document": "User Request: Largest orders.\n\nDashboard Components:\nTitle: Largest Orders\nType: table\nDescription: List of largest orders by total value\nTitle: Monthly Revenue Trend\nType: chart\nDescription: Monthly revenue trend from largest orders\nTitle: Total Revenue from Largest Orders\nType: kpi\nDescription: Total revenue generated from the largest orders",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Largest Orders",
+      "type": "table",
+      "columns": [
+        "OrderID",
+        "CustomerID",
+        "OrderDate",
+        "TotalValue"
+      ],
+      "sample_data": [
+        {
+          "OrderID": 13460,
+          "CustomerID": "RANCH",
+          "OrderDate": "2014-02-28 14:46:27",
+          "TotalValue": 73431.42
+        },
+        {
+          "OrderID": 22571,
+          "CustomerID": "WELLI",
+          "OrderDate": "2017-11-04 22:56:37",
+          "TotalValue": 69796.71
+        },
+        {
+          "OrderID": 21669,
+          "CustomerID": "MEREP",
+          "OrderDate": "2014-12-04 09:35:01",
+          "TotalValue": 69502.71
+        },
+        {
+          "OrderID": 14425,
+          "CustomerID": "LONEP",
+          "OrderDate": "2015-04-11 11:09:29",
+          "TotalValue": 69353.99
+        },
+        {
+          "OrderID": 12861,
+          "CustomerID": "PRINI",
+          "OrderDate": "2021-01-13 04:34:29",
+          "TotalValue": 69289.37
+        }
+      ]
+    },
+    {
+      "id": "component_2",
+      "title": "Monthly Revenue Trend",
+      "type": "chart",
+      "chart_type": "line",
+      "x": "OrderMonth",
+      "y": "MonthlyRevenue"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Revenue from Largest Orders",
+      "type": "kpi",
+      "columns": [
+        "TotalRevenue"
+      ],
+      "sample_data": [
+        {
+          "TotalRevenue": 693139.21
+        }
+      ]
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Largest Orders",
+      "type": "table",
+      "description": "List of largest orders by total value",
+      "sql": "SELECT o.OrderID, o.CustomerID, o.OrderDate, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalValue FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY o.OrderID ORDER BY TotalValue DESC LIMIT 10"
+    },
+    {
+      "id": "component_2",
+      "title": "Monthly Revenue Trend",
+      "type": "chart",
+      "description": "Monthly revenue trend from largest orders",
+      "sql": "SELECT strftime('%Y-%m', o.OrderDate) AS OrderMonth, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS MonthlyRevenue FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY OrderMonth ORDER BY OrderMonth"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Revenue from Largest Orders",
+      "type": "kpi",
+      "description": "Total revenue generated from the largest orders",
+      "sql": "SELECT SUM(TotalValue) AS TotalRevenue FROM (SELECT SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalValue FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY o.OrderID ORDER BY TotalValue DESC LIMIT 10)"
+    }
+  ],
+  "timestamp": "2026-07-14T03:14:17.442383"
+}
