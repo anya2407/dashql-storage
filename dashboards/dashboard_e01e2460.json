@@ -1,0 +1,49 @@
+{
+  "dashboard_id": "dashboard_e01e2460",
+  "request": "Best selling products.",
+  "search_document": "User Request: Best selling products.\n\nDashboard Components:\nTitle: Best Selling Products\nType: chart\nDescription: Sales volume of products over time\nTitle: Top Product Categories\nType: table\nDescription: Categories with the highest sales\nTitle: Total Units Sold\nType: kpi\nDescription: Overall units sold across all products",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Best Selling Products",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "ProductName",
+      "y": "TotalQuantity"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Product Categories",
+      "type": "table"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Units Sold",
+      "type": "kpi"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Best Selling Products",
+      "type": "chart",
+      "description": "Sales volume of products over time",
+      "sql": "SELECT p.ProductName, strftime('%Y-%m', o.OrderDate) AS OrderMonth, SUM(od.Quantity) AS TotalQuantity FROM 'Order Details' od JOIN Products p ON od.ProductID = p.ProductID JOIN Orders o ON od.OrderID = o.OrderID GROUP BY p.ProductName, OrderMonth ORDER BY OrderMonth, TotalQuantity DESC"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Product Categories",
+      "type": "table",
+      "description": "Categories with the highest sales",
+      "sql": "SELECT c.CategoryName, SUM(od.Quantity) AS TotalQuantity FROM 'Order Details' od JOIN Products p ON od.ProductID = p.ProductID JOIN Categories c ON p.CategoryID = c.CategoryID GROUP BY c.CategoryName ORDER BY TotalQuantity DESC"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Units Sold",
+      "type": "kpi",
+      "description": "Overall units sold across all products",
+      "sql": "SELECT SUM(Quantity) AS TotalUnitsSold FROM 'Order Details'"
+    }
+  ],
+  "timestamp": "2026-07-14T01:31:02.293408"
+}
