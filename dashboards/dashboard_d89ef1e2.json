@@ -1,0 +1,49 @@
+{
+  "dashboard_id": "dashboard_d89ef1e2",
+  "request": "Employees hired each year.",
+  "search_document": "User Request: Employees hired each year.\n\nDashboard Components:\nTitle: Employees Hired by Year\nType: chart\nDescription: Trend of employees hired each year\nTitle: Employee Count by Region\nType: table\nDescription: Number of employees hired in each region\nTitle: Total Employees Hired\nType: kpi\nDescription: Total number of employees hired",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Employees Hired by Year",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "HireYear",
+      "y": "EmployeeCount"
+    },
+    {
+      "id": "component_2",
+      "title": "Employee Count by Region",
+      "type": "table"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Employees Hired",
+      "type": "kpi"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Employees Hired by Year",
+      "type": "chart",
+      "description": "Trend of employees hired each year",
+      "sql": "SELECT strftime('%Y', HireDate) AS HireYear, COUNT(EmployeeID) AS EmployeeCount FROM Employees GROUP BY HireYear ORDER BY HireYear"
+    },
+    {
+      "id": "component_2",
+      "title": "Employee Count by Region",
+      "type": "table",
+      "description": "Number of employees hired in each region",
+      "sql": "SELECT Region, COUNT(EmployeeID) AS EmployeeCount FROM Employees GROUP BY Region ORDER BY EmployeeCount DESC"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Employees Hired",
+      "type": "kpi",
+      "description": "Total number of employees hired",
+      "sql": "SELECT COUNT(EmployeeID) AS TotalEmployeesHired FROM Employees"
+    }
+  ],
+  "timestamp": "2026-07-14T02:31:01.445235"
+}
