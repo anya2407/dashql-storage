@@ -1,0 +1,186 @@
+{
+  "dashboard_id": "dashboard_2347fc66",
+  "request": "Show me everything.",
+  "search_document": "User Request: Show me everything.\n\nDashboard Components:\nTitle: Monthly Revenue\nType: chart\nDescription: Monthly revenue trend\nTitle: Top Customers by Region\nType: table\nDescription: Highest spending customers aggregated by region\nTitle: Total Revenue\nType: kpi\nDescription: Overall revenue\nTitle: Product Performance\nType: chart\nDescription: Sales performance of products\nTitle: Order Trends\nType: chart\nDescription: Trends in order volume over time\nTitle: Customer Demographics\nType: pie_chart\nDescription: Distribution of customers by type\nTitle: Inventory Levels\nType: table\nDescription: Current inventory levels of products\nTitle: Shipping Performance\nType: chart\nDescription: Analysis of shipping times and costs",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Monthly Revenue",
+      "type": "chart",
+      "chart_type": "line",
+      "x": "Month",
+      "y": "Revenue"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Customers by Region",
+      "type": "table",
+      "columns": [
+        "Region",
+        "CompanyName",
+        "TotalSpending"
+      ],
+      "sample_data": [
+        {
+          "Region": null,
+          "CompanyName": "IT",
+          "TotalSpending": 9745371.29
+        },
+        {
+          "Region": "British Isles",
+          "CompanyName": "B's Beverages",
+          "TotalSpending": 6154115.34
+        },
+        {
+          "Region": "British Isles",
+          "CompanyName": "Consolidated Holdings",
+          "TotalSpending": 4931207.19
+        },
+        {
+          "Region": "British Isles",
+          "CompanyName": "Island Trading",
+          "TotalSpending": 4885549.18
+        },
+        {
+          "Region": "British Isles",
+          "CompanyName": "Seven Seas Imports",
+          "TotalSpending": 4749839.215
+        }
+      ]
+    },
+    {
+      "id": "component_3",
+      "title": "Total Revenue",
+      "type": "kpi",
+      "columns": [
+        "TotalRevenue"
+      ],
+      "sample_data": [
+        {
+          "TotalRevenue": 448386633.1695
+        }
+      ]
+    },
+    {
+      "id": "component_4",
+      "title": "Product Performance",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "ProductName",
+      "y": "TotalQuantitySold"
+    },
+    {
+      "id": "component_5",
+      "title": "Order Trends",
+      "type": "chart",
+      "chart_type": "line",
+      "x": "Month",
+      "y": "OrderCount"
+    },
+    {
+      "id": "component_6",
+      "title": "Customer Demographics",
+      "type": "pie_chart",
+      "columns": [],
+      "sample_data": []
+    },
+    {
+      "id": "component_7",
+      "title": "Inventory Levels",
+      "type": "table",
+      "columns": [
+        "ProductName",
+        "UnitsInStock"
+      ],
+      "sample_data": [
+        {
+          "ProductName": "Rh\u00f6nbr\u00e4u Klosterbier",
+          "UnitsInStock": 125
+        },
+        {
+          "ProductName": "Boston Crab Meat",
+          "UnitsInStock": 123
+        },
+        {
+          "ProductName": "Grandma's Boysenberry Spread",
+          "UnitsInStock": 120
+        },
+        {
+          "ProductName": "P\u00e2t\u00e9 chinois",
+          "UnitsInStock": 115
+        },
+        {
+          "ProductName": "Sirop d'\u00e9rable",
+          "UnitsInStock": 113
+        }
+      ]
+    },
+    {
+      "id": "component_8",
+      "title": "Shipping Performance",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "ShipVia",
+      "y": "TotalFreight"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Monthly Revenue",
+      "type": "chart",
+      "description": "Monthly revenue trend",
+      "sql": "SELECT strftime('%Y-%m', OrderDate) AS Month, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS Revenue FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY Month ORDER BY Month"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Customers by Region",
+      "type": "table",
+      "description": "Highest spending customers aggregated by region",
+      "sql": "SELECT c.Region, c.CompanyName, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalSpending FROM Orders o JOIN Customers c ON o.CustomerID = c.CustomerID JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY c.Region, c.CompanyName ORDER BY c.Region, TotalSpending DESC"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Revenue",
+      "type": "kpi",
+      "description": "Overall revenue",
+      "sql": "SELECT SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalRevenue FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID"
+    },
+    {
+      "id": "component_4",
+      "title": "Product Performance",
+      "type": "chart",
+      "description": "Sales performance of products",
+      "sql": "SELECT p.ProductName, SUM(od.Quantity) AS TotalQuantitySold FROM Products p JOIN \"Order Details\" od ON p.ProductID = od.ProductID GROUP BY p.ProductName ORDER BY TotalQuantitySold DESC"
+    },
+    {
+      "id": "component_5",
+      "title": "Order Trends",
+      "type": "chart",
+      "description": "Trends in order volume over time",
+      "sql": "SELECT strftime('%Y-%m', OrderDate) AS Month, COUNT(OrderID) AS OrderCount FROM Orders GROUP BY Month ORDER BY Month"
+    },
+    {
+      "id": "component_6",
+      "title": "Customer Demographics",
+      "type": "pie_chart",
+      "description": "Distribution of customers by type",
+      "sql": "SELECT cd.CustomerDesc, COUNT(ccd.CustomerID) AS CustomerCount FROM CustomerDemographics cd JOIN CustomerCustomerDemo ccd ON cd.CustomerTypeID = ccd.CustomerTypeID GROUP BY cd.CustomerDesc"
+    },
+    {
+      "id": "component_7",
+      "title": "Inventory Levels",
+      "type": "table",
+      "description": "Current inventory levels of products",
+      "sql": "SELECT ProductName, UnitsInStock FROM Products ORDER BY UnitsInStock DESC"
+    },
+    {
+      "id": "component_8",
+      "title": "Shipping Performance",
+      "type": "chart",
+      "description": "Analysis of shipping times and costs",
+      "sql": "SELECT ShipVia, AVG(julianday(ShippedDate) - julianday(OrderDate)) AS AvgShippingTime, SUM(Freight) AS TotalFreight FROM Orders GROUP BY ShipVia"
+    }
+  ],
+  "timestamp": "2026-07-14T03:58:29.518657"
+}
