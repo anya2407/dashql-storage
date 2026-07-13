@@ -1,0 +1,49 @@
+{
+  "dashboard_id": "dashboard_1a6c9a17",
+  "request": "Products by category.",
+  "search_document": "User Request: Products by category.\n\nDashboard Components:\nTitle: Products by Category\nType: chart\nDescription: Distribution of products across different categories\nTitle: Top Categories\nType: table\nDescription: Categories with the highest number of products\nTitle: Total Products\nType: kpi\nDescription: Overall count of products available",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Products by Category",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "CategoryName",
+      "y": "ProductCount"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Categories",
+      "type": "table"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Products",
+      "type": "kpi"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Products by Category",
+      "type": "chart",
+      "description": "Distribution of products across different categories",
+      "sql": "SELECT c.CategoryName, COUNT(p.ProductID) AS ProductCount FROM Categories c LEFT JOIN Products p ON c.CategoryID = p.CategoryID GROUP BY c.CategoryName"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Categories",
+      "type": "table",
+      "description": "Categories with the highest number of products",
+      "sql": "SELECT c.CategoryName, COUNT(p.ProductID) AS ProductCount FROM Categories c LEFT JOIN Products p ON c.CategoryID = p.CategoryID GROUP BY c.CategoryName ORDER BY ProductCount DESC LIMIT 5"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Products",
+      "type": "kpi",
+      "description": "Overall count of products available",
+      "sql": "SELECT COUNT(ProductID) AS TotalProducts FROM Products"
+    }
+  ],
+  "timestamp": "2026-07-14T03:17:22.615617"
+}
