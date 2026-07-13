@@ -1,0 +1,76 @@
+{
+  "dashboard_id": "dashboard_b40e0146",
+  "request": "Sales KPI dashboard.",
+  "search_document": "User Request: Sales KPI dashboard.\n\nDashboard Components:\nTitle: Monthly Revenue\nType: chart\nDescription: Monthly revenue trend\nTitle: Top Regions by Sales\nType: table\nDescription: Regions with the highest sales\nTitle: Total Revenue\nType: kpi\nDescription: Overall revenue\nTitle: Sales by Product Category\nType: chart\nDescription: Revenue breakdown by product category\nTitle: Order Volume\nType: kpi\nDescription: Total number of orders",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Monthly Revenue",
+      "type": "chart",
+      "chart_type": "line",
+      "x": "Month",
+      "y": "Revenue"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Regions by Sales",
+      "type": "table"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Revenue",
+      "type": "kpi"
+    },
+    {
+      "id": "component_4",
+      "title": "Sales by Product Category",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "CategoryName",
+      "y": "Revenue"
+    },
+    {
+      "id": "component_5",
+      "title": "Order Volume",
+      "type": "kpi"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Monthly Revenue",
+      "type": "chart",
+      "description": "Monthly revenue trend",
+      "sql": "SELECT strftime('%Y-%m', OrderDate) AS Month, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS Revenue FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY Month ORDER BY Month"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Regions by Sales",
+      "type": "table",
+      "description": "Regions with the highest sales",
+      "sql": "SELECT o.ShipRegion, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalSales FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY o.ShipRegion ORDER BY TotalSales DESC LIMIT 10"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Revenue",
+      "type": "kpi",
+      "description": "Overall revenue",
+      "sql": "SELECT SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalRevenue FROM \"Order Details\" od"
+    },
+    {
+      "id": "component_4",
+      "title": "Sales by Product Category",
+      "type": "chart",
+      "description": "Revenue breakdown by product category",
+      "sql": "SELECT c.CategoryName, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS Revenue FROM \"Order Details\" od JOIN Products p ON od.ProductID = p.ProductID JOIN Categories c ON p.CategoryID = c.CategoryID GROUP BY c.CategoryName ORDER BY Revenue DESC"
+    },
+    {
+      "id": "component_5",
+      "title": "Order Volume",
+      "type": "kpi",
+      "description": "Total number of orders",
+      "sql": "SELECT COUNT(*) AS TotalOrders FROM Orders"
+    }
+  ],
+  "timestamp": "2026-07-14T02:22:44.095328"
+}
