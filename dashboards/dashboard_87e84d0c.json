@@ -1,0 +1,109 @@
+{
+  "dashboard_id": "dashboard_87e84d0c",
+  "request": "Most expensive products.",
+  "search_document": "User Request: Most expensive products.\n\nDashboard Components:\nTitle: Most Expensive Products\nType: table\nDescription: List of products sorted by unit price\nTitle: Product Categories Distribution\nType: pie_chart\nDescription: Distribution of products across different categories\nTitle: Total Inventory Value\nType: kpi\nDescription: Total value of all products in stock",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Most Expensive Products",
+      "type": "table",
+      "columns": [
+        "ProductName",
+        "UnitPrice"
+      ],
+      "sample_data": [
+        {
+          "ProductName": "C\u00f4te de Blaye",
+          "UnitPrice": 263.5
+        },
+        {
+          "ProductName": "Th\u00fcringer Rostbratwurst",
+          "UnitPrice": 123.79
+        },
+        {
+          "ProductName": "Mishi Kobe Niku",
+          "UnitPrice": 97.0
+        },
+        {
+          "ProductName": "Sir Rodney's Marmalade",
+          "UnitPrice": 81.0
+        },
+        {
+          "ProductName": "Carnarvon Tigers",
+          "UnitPrice": 62.5
+        }
+      ]
+    },
+    {
+      "id": "component_2",
+      "title": "Product Categories Distribution",
+      "type": "pie_chart",
+      "chart_type": "pie",
+      "x": "CategoryName",
+      "y": "ProductCount",
+      "columns": [
+        "CategoryName",
+        "ProductCount"
+      ],
+      "sample_data": [
+        {
+          "CategoryName": "Beverages",
+          "ProductCount": 12
+        },
+        {
+          "CategoryName": "Condiments",
+          "ProductCount": 12
+        },
+        {
+          "CategoryName": "Confections",
+          "ProductCount": 13
+        },
+        {
+          "CategoryName": "Dairy Products",
+          "ProductCount": 10
+        },
+        {
+          "CategoryName": "Grains/Cereals",
+          "ProductCount": 7
+        }
+      ]
+    },
+    {
+      "id": "component_3",
+      "title": "Total Inventory Value",
+      "type": "kpi",
+      "columns": [
+        "TotalInventoryValue"
+      ],
+      "sample_data": [
+        {
+          "TotalInventoryValue": 74050.85
+        }
+      ]
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Most Expensive Products",
+      "type": "table",
+      "description": "List of products sorted by unit price",
+      "sql": "SELECT \"ProductName\", \"UnitPrice\" FROM \"Products\" ORDER BY \"UnitPrice\" DESC"
+    },
+    {
+      "id": "component_2",
+      "title": "Product Categories Distribution",
+      "type": "pie_chart",
+      "description": "Distribution of products across different categories",
+      "sql": "SELECT c.\"CategoryName\", COUNT(p.\"ProductID\") AS \"ProductCount\" FROM \"Products\" p JOIN \"Categories\" c ON p.\"CategoryID\" = c.\"CategoryID\" GROUP BY c.\"CategoryName\""
+    },
+    {
+      "id": "component_3",
+      "title": "Total Inventory Value",
+      "type": "kpi",
+      "description": "Total value of all products in stock",
+      "sql": "SELECT SUM(\"UnitPrice\" * \"UnitsInStock\") AS \"TotalInventoryValue\" FROM \"Products\""
+    }
+  ],
+  "timestamp": "2026-07-14T03:02:08.160638"
+}
