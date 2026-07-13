@@ -1,0 +1,52 @@
+{
+  "dashboard_id": "dashboard_e527618a",
+  "request": "Units in stock by category.",
+  "search_document": "User Request: Units in stock by category.\n\nDashboard Components:\nTitle: Units in Stock by Category\nType: bar_chart\nDescription: Visual representation of units in stock categorized by product categories\nTitle: Total Units in Stock\nType: kpi\nDescription: Total number of units in stock across all categories\nTitle: Category Breakdown\nType: pie_chart\nDescription: Percentage distribution of units in stock by category",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Units in Stock by Category",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "CategoryName",
+      "y": "TotalUnitsInStock"
+    },
+    {
+      "id": "component_2",
+      "title": "Total Units in Stock",
+      "type": "kpi"
+    },
+    {
+      "id": "component_3",
+      "title": "Category Breakdown",
+      "type": "chart",
+      "chart_type": "pie",
+      "x": "CategoryName",
+      "y": "PercentageOfTotal"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Units in Stock by Category",
+      "type": "bar_chart",
+      "description": "Visual representation of units in stock categorized by product categories",
+      "sql": "SELECT c.CategoryName, SUM(p.UnitsInStock) AS TotalUnitsInStock FROM Products p JOIN Categories c ON p.CategoryID = c.CategoryID GROUP BY c.CategoryName"
+    },
+    {
+      "id": "component_2",
+      "title": "Total Units in Stock",
+      "type": "kpi",
+      "description": "Total number of units in stock across all categories",
+      "sql": "SELECT SUM(UnitsInStock) AS TotalUnitsInStock FROM Products"
+    },
+    {
+      "id": "component_3",
+      "title": "Category Breakdown",
+      "type": "pie_chart",
+      "description": "Percentage distribution of units in stock by category",
+      "sql": "SELECT c.CategoryName, (SUM(p.UnitsInStock) * 1.0 / (SELECT SUM(UnitsInStock) FROM Products)) * 100 AS PercentageOfTotal FROM Products p JOIN Categories c ON p.CategoryID = c.CategoryID GROUP BY c.CategoryName"
+    }
+  ],
+  "timestamp": "2026-07-14T03:52:58.453273"
+}
