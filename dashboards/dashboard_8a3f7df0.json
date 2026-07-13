@@ -1,0 +1,49 @@
+{
+  "dashboard_id": "dashboard_8a3f7df0",
+  "request": "Top revenue months.",
+  "search_document": "User Request: Top revenue months.\n\nDashboard Components:\nTitle: Monthly Revenue\nType: chart\nDescription: Monthly revenue trend\nTitle: Top Customers by Revenue\nType: table\nDescription: Highest spending customers aggregated by total revenue\nTitle: Total Revenue\nType: kpi\nDescription: Overall revenue for the selected period",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Monthly Revenue",
+      "type": "chart",
+      "chart_type": "line",
+      "x": "Month",
+      "y": "Revenue"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Customers by Revenue",
+      "type": "table"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Revenue",
+      "type": "kpi"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Monthly Revenue",
+      "type": "chart",
+      "description": "Monthly revenue trend",
+      "sql": "SELECT strftime('%Y-%m', OrderDate) AS Month, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS Revenue FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY Month ORDER BY Month"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Customers by Revenue",
+      "type": "table",
+      "description": "Highest spending customers aggregated by total revenue",
+      "sql": "SELECT c.CompanyName, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalRevenue FROM Customers c JOIN Orders o ON c.CustomerID = o.CustomerID JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY c.CompanyName ORDER BY TotalRevenue DESC LIMIT 10"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Revenue",
+      "type": "kpi",
+      "description": "Overall revenue for the selected period",
+      "sql": "SELECT SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalRevenue FROM \"Order Details\" od"
+    }
+  ],
+  "timestamp": "2026-07-14T03:46:45.052183"
+}
