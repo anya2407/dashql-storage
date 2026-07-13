@@ -1,0 +1,49 @@
+{
+  "dashboard_id": "dashboard_f8368008",
+  "request": "Products per supplier.",
+  "search_document": "User Request: Products per supplier.\n\nDashboard Components:\nTitle: Products per Supplier\nType: chart\nDescription: Distribution of products across different suppliers\nTitle: Supplier Overview\nType: table\nDescription: List of suppliers with their product counts\nTitle: Total Products\nType: kpi\nDescription: Total number of products available",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Products per Supplier",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "CompanyName",
+      "y": "ProductCount"
+    },
+    {
+      "id": "component_2",
+      "title": "Supplier Overview",
+      "type": "table"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Products",
+      "type": "kpi"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Products per Supplier",
+      "type": "chart",
+      "description": "Distribution of products across different suppliers",
+      "sql": "SELECT s.CompanyName, COUNT(p.ProductID) AS ProductCount FROM Suppliers s LEFT JOIN Products p ON s.SupplierID = p.SupplierID GROUP BY s.CompanyName"
+    },
+    {
+      "id": "component_2",
+      "title": "Supplier Overview",
+      "type": "table",
+      "description": "List of suppliers with their product counts",
+      "sql": "SELECT s.SupplierID, s.CompanyName, COUNT(p.ProductID) AS ProductCount FROM Suppliers s LEFT JOIN Products p ON s.SupplierID = p.SupplierID GROUP BY s.SupplierID, s.CompanyName"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Products",
+      "type": "kpi",
+      "description": "Total number of products available",
+      "sql": "SELECT COUNT(ProductID) AS TotalProducts FROM Products"
+    }
+  ],
+  "timestamp": "2026-07-14T03:04:06.488185"
+}
