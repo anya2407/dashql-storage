@@ -1,0 +1,49 @@
+{
+  "dashboard_id": "dashboard_bc0b1576",
+  "request": "Best selling products.",
+  "search_document": "User Request: Best selling products.\n\nDashboard Components:\nTitle: Best Selling Products\nType: chart\nDescription: Sales volume of top products\nTitle: Product Sales by Category\nType: table\nDescription: Sales performance of products categorized\nTitle: Total Units Sold\nType: kpi\nDescription: Overall units sold across all products",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Best Selling Products",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "ProductName",
+      "y": "TotalUnitsSold"
+    },
+    {
+      "id": "component_2",
+      "title": "Product Sales by Category",
+      "type": "table"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Units Sold",
+      "type": "kpi"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Best Selling Products",
+      "type": "chart",
+      "description": "Sales volume of top products",
+      "sql": "SELECT p.ProductName, SUM(od.Quantity) AS TotalUnitsSold FROM \"Order Details\" od JOIN Products p ON od.ProductID = p.ProductID GROUP BY p.ProductName ORDER BY TotalUnitsSold DESC LIMIT 10"
+    },
+    {
+      "id": "component_2",
+      "title": "Product Sales by Category",
+      "type": "table",
+      "description": "Sales performance of products categorized",
+      "sql": "SELECT c.CategoryName, p.ProductName, SUM(od.Quantity) AS TotalUnitsSold FROM \"Order Details\" od JOIN Products p ON od.ProductID = p.ProductID JOIN Categories c ON p.CategoryID = c.CategoryID GROUP BY c.CategoryName, p.ProductName ORDER BY c.CategoryName, TotalUnitsSold DESC"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Units Sold",
+      "type": "kpi",
+      "description": "Overall units sold across all products",
+      "sql": "SELECT SUM(Quantity) AS TotalUnitsSold FROM \"Order Details\""
+    }
+  ],
+  "timestamp": "2026-07-14T03:54:11.718478"
+}
