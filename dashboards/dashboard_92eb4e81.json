@@ -1,0 +1,64 @@
+{
+  "dashboard_id": "dashboard_92eb4e81",
+  "request": "Categories overview.",
+  "search_document": "User Request: Categories overview.\n\nDashboard Components:\nTitle: Category Distribution\nType: pie_chart\nDescription: Percentage of products in each category\nTitle: Top Categories by Sales\nType: bar_chart\nDescription: Categories with the highest sales volume\nTitle: Total Number of Categories\nType: kpi\nDescription: Count of distinct product categories\nTitle: Category Performance\nType: table\nDescription: Summary of sales and revenue by category",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Category Distribution",
+      "type": "chart",
+      "chart_type": "pie",
+      "x": "CategoryName",
+      "y": "Percentage"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Categories by Sales",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "CategoryName",
+      "y": "TotalSales"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Number of Categories",
+      "type": "kpi"
+    },
+    {
+      "id": "component_4",
+      "title": "Category Performance",
+      "type": "table"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Category Distribution",
+      "type": "pie_chart",
+      "description": "Percentage of products in each category",
+      "sql": "SELECT c.CategoryName, COUNT(p.ProductID) * 100.0 / (SELECT COUNT(*) FROM Products) AS Percentage FROM Categories c JOIN Products p ON c.CategoryID = p.CategoryID GROUP BY c.CategoryName"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Categories by Sales",
+      "type": "bar_chart",
+      "description": "Categories with the highest sales volume",
+      "sql": "SELECT c.CategoryName, SUM(od.Quantity) AS TotalSales FROM Categories c JOIN Products p ON c.CategoryID = p.CategoryID JOIN 'Order Details' od ON p.ProductID = od.ProductID GROUP BY c.CategoryName ORDER BY TotalSales DESC LIMIT 5"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Number of Categories",
+      "type": "kpi",
+      "description": "Count of distinct product categories",
+      "sql": "SELECT COUNT(DISTINCT CategoryID) AS TotalCategories FROM Categories"
+    },
+    {
+      "id": "component_4",
+      "title": "Category Performance",
+      "type": "table",
+      "description": "Summary of sales and revenue by category",
+      "sql": "SELECT c.CategoryName, SUM(od.Quantity) AS TotalSales, SUM(od.Quantity * od.UnitPrice * (1 - od.Discount)) AS TotalRevenue FROM Categories c JOIN Products p ON c.CategoryID = p.CategoryID JOIN 'Order Details' od ON p.ProductID = od.ProductID GROUP BY c.CategoryName"
+    }
+  ],
+  "timestamp": "2026-07-14T01:33:40.561729"
+}
