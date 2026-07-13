@@ -1,0 +1,91 @@
+{
+  "dashboard_id": "dashboard_9928469b",
+  "request": "Order summary dashboard.",
+  "search_document": "User Request: Order summary dashboard.\n\nDashboard Components:\nTitle: Monthly Revenue\nType: chart\nDescription: Monthly revenue trend\nTitle: Top Customers by Revenue\nType: table\nDescription: Highest spending customers aggregated by total order value\nTitle: Total Revenue\nType: kpi\nDescription: Overall revenue from all orders\nTitle: Orders by Status\nType: chart\nDescription: Distribution of orders by status (e.g., shipped, pending)\nTitle: Average Order Value\nType: kpi\nDescription: Average value of orders placed\nTitle: Sales by Region\nType: chart\nDescription: Total sales revenue segmented by region",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Monthly Revenue",
+      "type": "chart",
+      "chart_type": "line",
+      "x": "Month",
+      "y": "Revenue"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Customers by Revenue",
+      "type": "table"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Revenue",
+      "type": "kpi"
+    },
+    {
+      "id": "component_4",
+      "title": "Orders by Status",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "Status",
+      "y": "OrderCount"
+    },
+    {
+      "id": "component_5",
+      "title": "Average Order Value",
+      "type": "kpi"
+    },
+    {
+      "id": "component_6",
+      "title": "Sales by Region",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "Region",
+      "y": "Revenue"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Monthly Revenue",
+      "type": "chart",
+      "description": "Monthly revenue trend",
+      "sql": "SELECT strftime('%Y-%m', OrderDate) AS Month, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS Revenue FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY Month ORDER BY Month"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Customers by Revenue",
+      "type": "table",
+      "description": "Highest spending customers aggregated by total order value",
+      "sql": "SELECT c.CustomerID, c.CompanyName, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalRevenue FROM Customers c JOIN Orders o ON c.CustomerID = o.CustomerID JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY c.CustomerID, c.CompanyName ORDER BY TotalRevenue DESC LIMIT 10"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Revenue",
+      "type": "kpi",
+      "description": "Overall revenue from all orders",
+      "sql": "SELECT SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalRevenue FROM \"Order Details\" od"
+    },
+    {
+      "id": "component_4",
+      "title": "Orders by Status",
+      "type": "chart",
+      "description": "Distribution of orders by status (e.g., shipped, pending)",
+      "sql": "SELECT CASE WHEN ShippedDate IS NOT NULL THEN 'Shipped' ELSE 'Pending' END AS Status, COUNT(*) AS OrderCount FROM Orders GROUP BY Status"
+    },
+    {
+      "id": "component_5",
+      "title": "Average Order Value",
+      "type": "kpi",
+      "description": "Average value of orders placed",
+      "sql": "SELECT AVG(OrderValue) AS AverageOrderValue FROM (SELECT o.OrderID, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS OrderValue FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY o.OrderID)"
+    },
+    {
+      "id": "component_6",
+      "title": "Sales by Region",
+      "type": "chart",
+      "description": "Total sales revenue segmented by region",
+      "sql": "SELECT e.Region, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS Revenue FROM Employees e JOIN Orders o ON e.EmployeeID = o.EmployeeID JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY e.Region"
+    }
+  ],
+  "timestamp": "2026-07-14T03:14:56.207711"
+}
