@@ -1,0 +1,76 @@
+{
+  "dashboard_id": "dashboard_7e5b6354",
+  "request": "Show orders from Germany.",
+  "search_document": "User Request: Show orders from Germany.\n\nDashboard Components:\nTitle: Monthly Orders from Germany\nType: chart\nDescription: Trend of orders placed from Germany over the months\nTitle: Top Products Ordered from Germany\nType: table\nDescription: Most ordered products by quantity from Germany\nTitle: Total Orders from Germany\nType: kpi\nDescription: Total number of orders placed from Germany\nTitle: Order Status Distribution in Germany\nType: chart\nDescription: Distribution of order statuses for orders from Germany\nTitle: Average Order Value from Germany\nType: kpi\nDescription: Average value of orders placed from Germany",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Monthly Orders from Germany",
+      "type": "chart",
+      "chart_type": "line",
+      "x": "Month",
+      "y": "OrderCount"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Products Ordered from Germany",
+      "type": "table"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Orders from Germany",
+      "type": "kpi"
+    },
+    {
+      "id": "component_4",
+      "title": "Order Status Distribution in Germany",
+      "type": "chart",
+      "chart_type": "pie",
+      "x": "OrderStatus",
+      "y": "OrderCount"
+    },
+    {
+      "id": "component_5",
+      "title": "Average Order Value from Germany",
+      "type": "kpi"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Monthly Orders from Germany",
+      "type": "chart",
+      "description": "Trend of orders placed from Germany over the months",
+      "sql": "SELECT strftime('%Y-%m', OrderDate) AS Month, COUNT(OrderID) AS OrderCount FROM Orders WHERE ShipCountry = 'Germany' GROUP BY Month ORDER BY Month"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Products Ordered from Germany",
+      "type": "table",
+      "description": "Most ordered products by quantity from Germany",
+      "sql": "SELECT p.ProductName, SUM(od.Quantity) AS TotalQuantity FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID JOIN Products p ON od.ProductID = p.ProductID WHERE o.ShipCountry = 'Germany' GROUP BY p.ProductID ORDER BY TotalQuantity DESC LIMIT 10"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Orders from Germany",
+      "type": "kpi",
+      "description": "Total number of orders placed from Germany",
+      "sql": "SELECT COUNT(OrderID) AS TotalOrders FROM Orders WHERE ShipCountry = 'Germany'"
+    },
+    {
+      "id": "component_4",
+      "title": "Order Status Distribution in Germany",
+      "type": "chart",
+      "description": "Distribution of order statuses for orders from Germany",
+      "sql": "SELECT CASE WHEN ShippedDate IS NOT NULL THEN 'Shipped' WHEN RequiredDate < date('now') THEN 'Overdue' ELSE 'Pending' END AS OrderStatus, COUNT(OrderID) AS OrderCount FROM Orders WHERE ShipCountry = 'Germany' GROUP BY OrderStatus"
+    },
+    {
+      "id": "component_5",
+      "title": "Average Order Value from Germany",
+      "type": "kpi",
+      "description": "Average value of orders placed from Germany",
+      "sql": "SELECT AVG(TotalOrderValue) AS AverageOrderValue FROM (SELECT o.OrderID, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalOrderValue FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID WHERE o.ShipCountry = 'Germany' GROUP BY o.OrderID)"
+    }
+  ],
+  "timestamp": "2026-07-14T02:23:12.575325"
+}
