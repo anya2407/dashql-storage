@@ -1,0 +1,98 @@
+{
+  "dashboard_id": "dashboard_54d91a7d",
+  "request": "Customer overview.",
+  "search_document": "User Request: Customer overview.\n\nDashboard Components:\nTitle: Customer Demographics\nType: chart\nDescription: Distribution of customers by demographic categories\nTitle: Customers by Region\nType: table\nDescription: Number of customers segmented by region\nTitle: Total Customers\nType: kpi\nDescription: Total number of customers\nTitle: Customer Types\nType: chart\nDescription: Breakdown of customers by type",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Customer Demographics",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "Demographic Category",
+      "y": "Count"
+    },
+    {
+      "id": "component_2",
+      "title": "Customers by Region",
+      "type": "table",
+      "columns": [
+        "Region",
+        "CustomerCount"
+      ],
+      "sample_data": [
+        {
+          "Region": null,
+          "CustomerCount": 2
+        },
+        {
+          "Region": "British Isles",
+          "CustomerCount": 8
+        },
+        {
+          "Region": "Central America",
+          "CustomerCount": 5
+        },
+        {
+          "Region": "Eastern Europe",
+          "CustomerCount": 1
+        },
+        {
+          "Region": "North America",
+          "CustomerCount": 16
+        }
+      ]
+    },
+    {
+      "id": "component_3",
+      "title": "Total Customers",
+      "type": "kpi",
+      "columns": [
+        "TotalCustomers"
+      ],
+      "sample_data": [
+        {
+          "TotalCustomers": 93
+        }
+      ]
+    },
+    {
+      "id": "component_4",
+      "title": "Customer Types",
+      "type": "chart",
+      "chart_type": "pie",
+      "x": "Customer Type",
+      "y": "Count"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Customer Demographics",
+      "type": "chart",
+      "description": "Distribution of customers by demographic categories",
+      "sql": "SELECT cd.CustomerDesc, COUNT(ccd.CustomerID) AS CustomerCount FROM CustomerDemographics cd LEFT JOIN CustomerCustomerDemo ccd ON cd.CustomerTypeID = ccd.CustomerTypeID GROUP BY cd.CustomerDesc"
+    },
+    {
+      "id": "component_2",
+      "title": "Customers by Region",
+      "type": "table",
+      "description": "Number of customers segmented by region",
+      "sql": "SELECT Region, COUNT(CustomerID) AS CustomerCount FROM Customers GROUP BY Region"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Customers",
+      "type": "kpi",
+      "description": "Total number of customers",
+      "sql": "SELECT COUNT(CustomerID) AS TotalCustomers FROM Customers"
+    },
+    {
+      "id": "component_4",
+      "title": "Customer Types",
+      "type": "chart",
+      "description": "Breakdown of customers by type",
+      "sql": "SELECT ccd.CustomerTypeID, COUNT(ccd.CustomerID) AS CustomerCount FROM CustomerCustomerDemo ccd GROUP BY ccd.CustomerTypeID"
+    }
+  ],
+  "timestamp": "2026-07-14T00:40:27.387403"
+}
