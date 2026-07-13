@@ -1,0 +1,142 @@
+{
+  "dashboard_id": "dashboard_c033449b",
+  "request": "dashboard with customer phone numbers",
+  "search_document": "User Request: dashboard with customer phone numbers\n\nDashboard Components:\nTitle: Monthly Revenue\nType: chart\nDescription: Monthly revenue trend\nTitle: Top Customers by Region\nType: table\nDescription: Highest spending customers aggregated by region\nTitle: Total Revenue\nType: kpi\nDescription: Overall revenue\nTitle: Customer Demographics\nType: chart\nDescription: Distribution of customers by type\nTitle: Orders by Region\nType: map\nDescription: Geographical distribution of orders",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Monthly Revenue",
+      "type": "chart",
+      "chart_type": "line",
+      "x": "Month",
+      "y": "Revenue"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Customers by Region",
+      "type": "table",
+      "columns": [
+        "Region",
+        "CompanyName",
+        "TotalSpending"
+      ],
+      "sample_data": [
+        {
+          "Region": null,
+          "CompanyName": "IT",
+          "TotalSpending": 9745371.29
+        },
+        {
+          "Region": "British Isles",
+          "CompanyName": "B's Beverages",
+          "TotalSpending": 6154115.34
+        },
+        {
+          "Region": "British Isles",
+          "CompanyName": "Consolidated Holdings",
+          "TotalSpending": 4931207.19
+        },
+        {
+          "Region": "British Isles",
+          "CompanyName": "Island Trading",
+          "TotalSpending": 4885549.18
+        },
+        {
+          "Region": "British Isles",
+          "CompanyName": "Seven Seas Imports",
+          "TotalSpending": 4749839.215
+        }
+      ]
+    },
+    {
+      "id": "component_3",
+      "title": "Total Revenue",
+      "type": "kpi",
+      "columns": [
+        "TotalRevenue"
+      ],
+      "sample_data": [
+        {
+          "TotalRevenue": 448386633.1695
+        }
+      ]
+    },
+    {
+      "id": "component_4",
+      "title": "Customer Demographics",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": null,
+      "y": null
+    },
+    {
+      "id": "component_5",
+      "title": "Orders by Region",
+      "type": "map",
+      "columns": [
+        "Region",
+        "OrderCount"
+      ],
+      "sample_data": [
+        {
+          "Region": null,
+          "OrderCount": 335
+        },
+        {
+          "Region": "British Isles",
+          "OrderCount": 1416
+        },
+        {
+          "Region": "Central America",
+          "OrderCount": 898
+        },
+        {
+          "Region": "Eastern Europe",
+          "OrderCount": 177
+        },
+        {
+          "Region": "North America",
+          "OrderCount": 2800
+        }
+      ]
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Monthly Revenue",
+      "type": "chart",
+      "description": "Monthly revenue trend",
+      "sql": "SELECT strftime('%Y-%m', OrderDate) AS Month, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS Revenue FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY Month ORDER BY Month"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Customers by Region",
+      "type": "table",
+      "description": "Highest spending customers aggregated by region",
+      "sql": "SELECT c.Region, c.CompanyName, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalSpending FROM Orders o JOIN Customers c ON o.CustomerID = c.CustomerID JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY c.Region, c.CompanyName ORDER BY c.Region, TotalSpending DESC"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Revenue",
+      "type": "kpi",
+      "description": "Overall revenue",
+      "sql": "SELECT SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalRevenue FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID"
+    },
+    {
+      "id": "component_4",
+      "title": "Customer Demographics",
+      "type": "chart",
+      "description": "Distribution of customers by type",
+      "sql": "SELECT cd.CustomerDesc, COUNT(ccd.CustomerID) AS CustomerCount FROM CustomerDemographics cd JOIN CustomerCustomerDemo ccd ON cd.CustomerTypeID = ccd.CustomerTypeID GROUP BY cd.CustomerDesc"
+    },
+    {
+      "id": "component_5",
+      "title": "Orders by Region",
+      "type": "map",
+      "description": "Geographical distribution of orders",
+      "sql": "SELECT c.Region, COUNT(o.OrderID) AS OrderCount FROM Orders o JOIN Customers c ON o.CustomerID = c.CustomerID GROUP BY c.Region"
+    }
+  ],
+  "timestamp": "2026-07-13T23:18:20.973526"
+}
