@@ -1,0 +1,73 @@
+{
+  "dashboard_id": "dashboard_8f6c331a",
+  "request": "Shipping dashboard.",
+  "search_document": "User Request: Shipping dashboard.\n\nDashboard Components:\nTitle: Monthly Shipping Revenue\nType: chart\nDescription: Trend of shipping revenue over the months\nTitle: Top Shipping Regions\nType: table\nDescription: Regions with the highest shipping volumes\nTitle: Total Shipments\nType: kpi\nDescription: Total number of shipments made\nTitle: Average Shipping Time\nType: kpi\nDescription: Average time taken for shipments to be delivered\nTitle: Shipping Method Breakdown\nType: pie_chart\nDescription: Distribution of shipments by shipping method",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Monthly Shipping Revenue",
+      "type": "chart",
+      "chart_type": "line",
+      "x": "Month",
+      "y": "TotalRevenue"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Shipping Regions",
+      "type": "table"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Shipments",
+      "type": "kpi"
+    },
+    {
+      "id": "component_4",
+      "title": "Average Shipping Time",
+      "type": "kpi"
+    },
+    {
+      "id": "component_5",
+      "title": "Shipping Method Breakdown",
+      "type": "pie_chart"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Monthly Shipping Revenue",
+      "type": "chart",
+      "description": "Trend of shipping revenue over the months",
+      "sql": "SELECT strftime('%Y-%m', OrderDate) AS Month, SUM(Freight) AS TotalRevenue FROM Orders GROUP BY Month ORDER BY Month"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Shipping Regions",
+      "type": "table",
+      "description": "Regions with the highest shipping volumes",
+      "sql": "SELECT ShipRegion, COUNT(OrderID) AS ShippingVolume FROM Orders GROUP BY ShipRegion ORDER BY ShippingVolume DESC LIMIT 10"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Shipments",
+      "type": "kpi",
+      "description": "Total number of shipments made",
+      "sql": "SELECT COUNT(OrderID) AS TotalShipments FROM Orders"
+    },
+    {
+      "id": "component_4",
+      "title": "Average Shipping Time",
+      "type": "kpi",
+      "description": "Average time taken for shipments to be delivered",
+      "sql": "SELECT AVG(julianday(ShippedDate) - julianday(OrderDate)) AS AverageShippingTime FROM Orders WHERE ShippedDate IS NOT NULL"
+    },
+    {
+      "id": "component_5",
+      "title": "Shipping Method Breakdown",
+      "type": "pie_chart",
+      "description": "Distribution of shipments by shipping method",
+      "sql": "SELECT Shippers.CompanyName, COUNT(Orders.OrderID) AS ShipmentCount FROM Orders JOIN Shippers ON Orders.ShipVia = Shippers.ShipperID GROUP BY Shippers.CompanyName"
+    }
+  ],
+  "timestamp": "2026-07-14T02:25:24.226896"
+}
