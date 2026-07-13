@@ -1,0 +1,49 @@
+{
+  "dashboard_id": "dashboard_1599541f",
+  "request": "Orders by shipper.",
+  "search_document": "User Request: Orders by shipper.\n\nDashboard Components:\nTitle: Orders by Shipper\nType: chart\nDescription: Distribution of orders by shipping company\nTitle: Top Shippers\nType: table\nDescription: Shippers with the highest number of orders\nTitle: Total Freight Charges\nType: kpi\nDescription: Overall freight charges incurred",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Orders by Shipper",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "CompanyName",
+      "y": "OrderCount"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Shippers",
+      "type": "table"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Freight Charges",
+      "type": "kpi"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Orders by Shipper",
+      "type": "chart",
+      "description": "Distribution of orders by shipping company",
+      "sql": "SELECT s.CompanyName, COUNT(o.OrderID) AS OrderCount FROM Orders o JOIN Shippers s ON o.ShipVia = s.ShipperID GROUP BY s.CompanyName"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Shippers",
+      "type": "table",
+      "description": "Shippers with the highest number of orders",
+      "sql": "SELECT s.CompanyName, COUNT(o.OrderID) AS OrderCount FROM Orders o JOIN Shippers s ON o.ShipVia = s.ShipperID GROUP BY s.CompanyName ORDER BY OrderCount DESC LIMIT 5"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Freight Charges",
+      "type": "kpi",
+      "description": "Overall freight charges incurred",
+      "sql": "SELECT SUM(Freight) AS TotalFreightCharges FROM Orders"
+    }
+  ],
+  "timestamp": "2026-07-14T02:23:46.225786"
+}
