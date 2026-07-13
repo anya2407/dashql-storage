@@ -1,0 +1,79 @@
+{
+  "dashboard_id": "dashboard_af31b71c",
+  "request": "Show me a dashboard of Germany's orders",
+  "search_document": "User Request: Show me a dashboard of Germany's orders\n\nDashboard Components:\nTitle: Monthly Revenue\nType: chart\nDescription: Monthly revenue trend for orders in Germany\nTitle: Top Products\nType: table\nDescription: Best-selling products in Germany\nTitle: Total Orders\nType: kpi\nDescription: Total number of orders placed in Germany\nTitle: Order Status Overview\nType: chart\nDescription: Distribution of order statuses (e.g., shipped, pending) in Germany\nTitle: Revenue by Region\nType: chart\nDescription: Revenue breakdown by region within Germany",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Monthly Revenue",
+      "type": "chart",
+      "chart_type": "line",
+      "x": "Month",
+      "y": "Revenue"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Products",
+      "type": "table"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Orders",
+      "type": "kpi"
+    },
+    {
+      "id": "component_4",
+      "title": "Order Status Overview",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "OrderStatus",
+      "y": "Count"
+    },
+    {
+      "id": "component_5",
+      "title": "Revenue by Region",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "ShipRegion",
+      "y": "Revenue"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Monthly Revenue",
+      "type": "chart",
+      "description": "Monthly revenue trend for orders in Germany",
+      "sql": "SELECT strftime('%Y-%m', OrderDate) AS Month, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS Revenue FROM Orders o JOIN 'Order Details' od ON o.OrderID = od.OrderID WHERE o.ShipCountry = 'Germany' GROUP BY Month ORDER BY Month"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Products",
+      "type": "table",
+      "description": "Best-selling products in Germany",
+      "sql": "SELECT p.ProductName, SUM(od.Quantity) AS TotalQuantity FROM Orders o JOIN 'Order Details' od ON o.OrderID = od.OrderID JOIN Products p ON od.ProductID = p.ProductID WHERE o.ShipCountry = 'Germany' GROUP BY p.ProductID ORDER BY TotalQuantity DESC LIMIT 10"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Orders",
+      "type": "kpi",
+      "description": "Total number of orders placed in Germany",
+      "sql": "SELECT COUNT(*) AS TotalOrders FROM Orders WHERE ShipCountry = 'Germany'"
+    },
+    {
+      "id": "component_4",
+      "title": "Order Status Overview",
+      "type": "chart",
+      "description": "Distribution of order statuses (e.g., shipped, pending) in Germany",
+      "sql": "SELECT CASE WHEN ShippedDate IS NOT NULL THEN 'Shipped' ELSE 'Pending' END AS OrderStatus, COUNT(*) AS Count FROM Orders WHERE ShipCountry = 'Germany' GROUP BY OrderStatus"
+    },
+    {
+      "id": "component_5",
+      "title": "Revenue by Region",
+      "type": "chart",
+      "description": "Revenue breakdown by region within Germany",
+      "sql": "SELECT o.ShipRegion, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS Revenue FROM Orders o JOIN 'Order Details' od ON o.OrderID = od.OrderID WHERE o.ShipCountry = 'Germany' GROUP BY o.ShipRegion ORDER BY Revenue DESC"
+    }
+  ],
+  "timestamp": "2026-07-13T23:09:48.805315"
+}
