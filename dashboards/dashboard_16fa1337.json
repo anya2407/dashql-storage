@@ -1,0 +1,83 @@
+{
+  "dashboard_id": "dashboard_16fa1337",
+  "request": "Customers by city.",
+  "search_document": "User Request: Customers by city.\n\nDashboard Components:\nTitle: Customers by City\nType: chart\nDescription: Distribution of customers across different cities\nTitle: Customer Count by Region\nType: table\nDescription: Number of customers in each region\nTitle: Total Customers\nType: kpi\nDescription: Total number of customers",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Customers by City",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "City",
+      "y": "CustomerCount"
+    },
+    {
+      "id": "component_2",
+      "title": "Customer Count by Region",
+      "type": "table",
+      "columns": [
+        "Region",
+        "CustomerCount"
+      ],
+      "sample_data": [
+        {
+          "Region": "Western Europe",
+          "CustomerCount": 28
+        },
+        {
+          "Region": "South America",
+          "CustomerCount": 16
+        },
+        {
+          "Region": "North America",
+          "CustomerCount": 16
+        },
+        {
+          "Region": "Southern Europe",
+          "CustomerCount": 10
+        },
+        {
+          "Region": "British Isles",
+          "CustomerCount": 8
+        }
+      ]
+    },
+    {
+      "id": "component_3",
+      "title": "Total Customers",
+      "type": "kpi",
+      "columns": [
+        "TotalCustomers"
+      ],
+      "sample_data": [
+        {
+          "TotalCustomers": 93
+        }
+      ]
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Customers by City",
+      "type": "chart",
+      "description": "Distribution of customers across different cities",
+      "sql": "SELECT City, COUNT(CustomerID) AS CustomerCount FROM Customers GROUP BY City ORDER BY CustomerCount DESC"
+    },
+    {
+      "id": "component_2",
+      "title": "Customer Count by Region",
+      "type": "table",
+      "description": "Number of customers in each region",
+      "sql": "SELECT Region, COUNT(CustomerID) AS CustomerCount FROM Customers GROUP BY Region ORDER BY CustomerCount DESC"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Customers",
+      "type": "kpi",
+      "description": "Total number of customers",
+      "sql": "SELECT COUNT(CustomerID) AS TotalCustomers FROM Customers"
+    }
+  ],
+  "timestamp": "2026-07-14T03:50:43.298423"
+}
