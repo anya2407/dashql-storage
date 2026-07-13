@@ -1,0 +1,83 @@
+{
+  "dashboard_id": "dashboard_b930359a",
+  "request": "Most expensive products.",
+  "search_document": "User Request: Most expensive products.\n\nDashboard Components:\nTitle: Most Expensive Products\nType: table\nDescription: List of products sorted by unit price\nTitle: Product Categories\nType: chart\nDescription: Distribution of products by category\nTitle: Total Inventory Value\nType: kpi\nDescription: Total value of all products in stock",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Most Expensive Products",
+      "type": "table",
+      "columns": [
+        "ProductName",
+        "UnitPrice"
+      ],
+      "sample_data": [
+        {
+          "ProductName": "C\u00f4te de Blaye",
+          "UnitPrice": 263.5
+        },
+        {
+          "ProductName": "Th\u00fcringer Rostbratwurst",
+          "UnitPrice": 123.79
+        },
+        {
+          "ProductName": "Mishi Kobe Niku",
+          "UnitPrice": 97.0
+        },
+        {
+          "ProductName": "Sir Rodney's Marmalade",
+          "UnitPrice": 81.0
+        },
+        {
+          "ProductName": "Carnarvon Tigers",
+          "UnitPrice": 62.5
+        }
+      ]
+    },
+    {
+      "id": "component_2",
+      "title": "Product Categories",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "CategoryName",
+      "y": "ProductCount"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Inventory Value",
+      "type": "kpi",
+      "columns": [
+        "TotalInventoryValue"
+      ],
+      "sample_data": [
+        {
+          "TotalInventoryValue": 74050.85
+        }
+      ]
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Most Expensive Products",
+      "type": "table",
+      "description": "List of products sorted by unit price",
+      "sql": "SELECT \"ProductName\", \"UnitPrice\" FROM \"Products\" ORDER BY \"UnitPrice\" DESC"
+    },
+    {
+      "id": "component_2",
+      "title": "Product Categories",
+      "type": "chart",
+      "description": "Distribution of products by category",
+      "sql": "SELECT c.\"CategoryName\", COUNT(p.\"ProductID\") AS \"ProductCount\" FROM \"Products\" p JOIN \"Categories\" c ON p.\"CategoryID\" = c.\"CategoryID\" GROUP BY c.\"CategoryName\""
+    },
+    {
+      "id": "component_3",
+      "title": "Total Inventory Value",
+      "type": "kpi",
+      "description": "Total value of all products in stock",
+      "sql": "SELECT SUM(\"UnitPrice\" * \"UnitsInStock\") AS \"TotalInventoryValue\" FROM \"Products\""
+    }
+  ],
+  "timestamp": "2026-07-14T03:53:11.951547"
+}
