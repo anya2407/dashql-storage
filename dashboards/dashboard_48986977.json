@@ -1,0 +1,49 @@
+{
+  "dashboard_id": "dashboard_48986977",
+  "request": "How does order size vary by shipping method?",
+  "search_document": "User Request: How does order size vary by shipping method?\n\nDashboard Components:\nTitle: Order Size by Shipping Method\nType: chart\nDescription: Comparison of average order size across different shipping methods\nTitle: Shipping Method Breakdown\nType: table\nDescription: Summary of orders by shipping method, including total orders and average order size\nTitle: Total Orders by Shipping Method\nType: kpi\nDescription: Total number of orders categorized by shipping method",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Order Size by Shipping Method",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "ShippingMethod",
+      "y": "AverageOrderSize"
+    },
+    {
+      "id": "component_2",
+      "title": "Shipping Method Breakdown",
+      "type": "table"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Orders by Shipping Method",
+      "type": "kpi"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Order Size by Shipping Method",
+      "type": "chart",
+      "description": "Comparison of average order size across different shipping methods",
+      "sql": "SELECT Shippers.CompanyName AS ShippingMethod, AVG(OrderDetails.Quantity * OrderDetails.UnitPrice * (1 - OrderDetails.Discount)) AS AverageOrderSize FROM Orders JOIN [Order Details] AS OrderDetails ON Orders.OrderID = OrderDetails.OrderID JOIN Shippers ON Orders.ShipVia = Shippers.ShipperID GROUP BY Shippers.CompanyName"
+    },
+    {
+      "id": "component_2",
+      "title": "Shipping Method Breakdown",
+      "type": "table",
+      "description": "Summary of orders by shipping method, including total orders and average order size",
+      "sql": "SELECT Shippers.CompanyName AS ShippingMethod, COUNT(Orders.OrderID) AS TotalOrders, AVG(OrderDetails.Quantity * OrderDetails.UnitPrice * (1 - OrderDetails.Discount)) AS AverageOrderSize FROM Orders JOIN [Order Details] AS OrderDetails ON Orders.OrderID = OrderDetails.OrderID JOIN Shippers ON Orders.ShipVia = Shippers.ShipperID GROUP BY Shippers.CompanyName"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Orders by Shipping Method",
+      "type": "kpi",
+      "description": "Total number of orders categorized by shipping method",
+      "sql": "SELECT Shippers.CompanyName AS ShippingMethod, COUNT(Orders.OrderID) AS TotalOrders FROM Orders JOIN Shippers ON Orders.ShipVia = Shippers.ShipperID GROUP BY Shippers.CompanyName"
+    }
+  ],
+  "timestamp": "2026-07-14T04:02:56.799806"
+}
