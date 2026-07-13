@@ -1,0 +1,85 @@
+{
+  "dashboard_id": "dashboard_6b0f2ca7",
+  "request": "Show me a dashboard of employee salaries by department, color-coded by favorite pizza topping",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Employee Count by Department",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "Title",
+      "y": "EmployeeCount"
+    },
+    {
+      "id": "component_2",
+      "title": "Average Salary by Department",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "Department",
+      "y": "AverageSalary"
+    },
+    {
+      "id": "component_3",
+      "title": "Employee Distribution by Region",
+      "type": "map",
+      "columns": [
+        "Region",
+        "EmployeeCount"
+      ],
+      "sample_data": [
+        {
+          "Region": "British Isles",
+          "EmployeeCount": 4
+        },
+        {
+          "Region": "North America",
+          "EmployeeCount": 5
+        }
+      ]
+    },
+    {
+      "id": "component_4",
+      "title": "Employee Turnover Rate",
+      "type": "kpi",
+      "columns": [
+        "TurnoverRate"
+      ],
+      "sample_data": [
+        {
+          "TurnoverRate": "Not Applicable"
+        }
+      ]
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Employee Count by Department",
+      "type": "chart",
+      "description": "Number of employees in each department",
+      "sql": "SELECT Title, COUNT(EmployeeID) AS EmployeeCount FROM Employees GROUP BY Title"
+    },
+    {
+      "id": "component_2",
+      "title": "Average Salary by Department",
+      "type": "chart",
+      "description": "Average salary of employees in each department",
+      "sql": "SELECT 'Not Applicable' AS Department, 0 AS AverageSalary"
+    },
+    {
+      "id": "component_3",
+      "title": "Employee Distribution by Region",
+      "type": "map",
+      "description": "Geographical distribution of employees",
+      "sql": "SELECT Region, COUNT(EmployeeID) AS EmployeeCount FROM Employees GROUP BY Region"
+    },
+    {
+      "id": "component_4",
+      "title": "Employee Turnover Rate",
+      "type": "kpi",
+      "description": "Percentage of employees leaving the company",
+      "sql": "SELECT 'Not Applicable' AS TurnoverRate"
+    }
+  ],
+  "timestamp": "2026-07-13T16:39:56.097648"
+}
