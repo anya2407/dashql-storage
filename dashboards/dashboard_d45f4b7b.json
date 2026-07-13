@@ -1,0 +1,49 @@
+{
+  "dashboard_id": "dashboard_d45f4b7b",
+  "request": "Customer count by country.",
+  "search_document": "User Request: Customer count by country.\n\nDashboard Components:\nTitle: Customer Count by Country\nType: chart\nDescription: Number of customers aggregated by country\nTitle: Customer Distribution by Region\nType: table\nDescription: Summary of customer counts across different regions\nTitle: Total Customer Count\nType: kpi\nDescription: Overall number of customers",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Customer Count by Country",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "Country",
+      "y": "CustomerCount"
+    },
+    {
+      "id": "component_2",
+      "title": "Customer Distribution by Region",
+      "type": "table"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Customer Count",
+      "type": "kpi"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Customer Count by Country",
+      "type": "chart",
+      "description": "Number of customers aggregated by country",
+      "sql": "SELECT Country, COUNT(CustomerID) AS CustomerCount FROM Customers GROUP BY Country"
+    },
+    {
+      "id": "component_2",
+      "title": "Customer Distribution by Region",
+      "type": "table",
+      "description": "Summary of customer counts across different regions",
+      "sql": "SELECT Region, COUNT(CustomerID) AS CustomerCount FROM Customers GROUP BY Region"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Customer Count",
+      "type": "kpi",
+      "description": "Overall number of customers",
+      "sql": "SELECT COUNT(CustomerID) AS TotalCustomerCount FROM Customers"
+    }
+  ],
+  "timestamp": "2026-07-14T01:29:06.023959"
+}
