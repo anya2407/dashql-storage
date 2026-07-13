@@ -1,0 +1,116 @@
+{
+  "dashboard_id": "dashboard_9481494d",
+  "request": "Freight cost analysis.",
+  "search_document": "User Request: Freight cost analysis.\n\nDashboard Components:\nTitle: Freight Cost by Month\nType: chart\nDescription: Trend of freight costs over the months\nTitle: Freight Cost by Region\nType: table\nDescription: Freight costs aggregated by region\nTitle: Total Freight Cost\nType: kpi\nDescription: Overall freight costs incurred\nTitle: Freight Cost Distribution by Carrier\nType: chart\nDescription: Freight costs distributed across different shippers\nTitle: Freight Cost vs. Revenue\nType: chart\nDescription: Comparison of freight costs against total revenue",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Freight Cost by Month",
+      "type": "chart",
+      "chart_type": "line",
+      "x": "Month",
+      "y": "TotalFreight"
+    },
+    {
+      "id": "component_2",
+      "title": "Freight Cost by Region",
+      "type": "table",
+      "columns": [
+        "ShipRegion",
+        "TotalFreight"
+      ],
+      "sample_data": [
+        {
+          "ShipRegion": "Western Europe",
+          "TotalFreight": 1247426.25
+        },
+        {
+          "ShipRegion": "South America",
+          "TotalFreight": 733001.5
+        },
+        {
+          "ShipRegion": "North America",
+          "TotalFreight": 705528.0
+        },
+        {
+          "ShipRegion": "Southern Europe",
+          "TotalFreight": 396037.25
+        },
+        {
+          "ShipRegion": "British Isles",
+          "TotalFreight": 366536.0
+        }
+      ]
+    },
+    {
+      "id": "component_3",
+      "title": "Total Freight Cost",
+      "type": "kpi",
+      "columns": [
+        "TotalFreight"
+      ],
+      "sample_data": [
+        {
+          "TotalFreight": 4047470.5
+        }
+      ]
+    },
+    {
+      "id": "component_4",
+      "title": "Freight Cost Distribution by Carrier",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "CompanyName",
+      "y": "TotalFreight"
+    },
+    {
+      "id": "component_5",
+      "title": "Freight Cost vs. Revenue",
+      "type": "chart",
+      "chart_type": "line",
+      "x": "Month",
+      "y": [
+        "TotalFreight",
+        "TotalRevenue"
+      ]
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Freight Cost by Month",
+      "type": "chart",
+      "description": "Trend of freight costs over the months",
+      "sql": "SELECT strftime('%Y-%m', OrderDate) AS Month, SUM(Freight) AS TotalFreight FROM Orders GROUP BY Month ORDER BY Month"
+    },
+    {
+      "id": "component_2",
+      "title": "Freight Cost by Region",
+      "type": "table",
+      "description": "Freight costs aggregated by region",
+      "sql": "SELECT ShipRegion, SUM(Freight) AS TotalFreight FROM Orders GROUP BY ShipRegion ORDER BY TotalFreight DESC"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Freight Cost",
+      "type": "kpi",
+      "description": "Overall freight costs incurred",
+      "sql": "SELECT SUM(Freight) AS TotalFreight FROM Orders"
+    },
+    {
+      "id": "component_4",
+      "title": "Freight Cost Distribution by Carrier",
+      "type": "chart",
+      "description": "Freight costs distributed across different shippers",
+      "sql": "SELECT Shippers.CompanyName, SUM(Orders.Freight) AS TotalFreight FROM Orders JOIN Shippers ON Orders.ShipVia = Shippers.ShipperID GROUP BY Shippers.CompanyName ORDER BY TotalFreight DESC"
+    },
+    {
+      "id": "component_5",
+      "title": "Freight Cost vs. Revenue",
+      "type": "chart",
+      "description": "Comparison of freight costs against total revenue",
+      "sql": "SELECT strftime('%Y-%m', Orders.OrderDate) AS Month, SUM(Orders.Freight) AS TotalFreight, SUM(OrderDetails.UnitPrice * OrderDetails.Quantity * (1 - OrderDetails.Discount)) AS TotalRevenue FROM Orders JOIN \"Order Details\" AS OrderDetails ON Orders.OrderID = OrderDetails.OrderID GROUP BY Month ORDER BY Month"
+    }
+  ],
+  "timestamp": "2026-07-14T03:14:36.537994"
+}
