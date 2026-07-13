@@ -1,0 +1,79 @@
+{
+  "dashboard_id": "dashboard_f6a2d1e9",
+  "request": "Employee performance dashboard.",
+  "search_document": "User Request: Employee performance dashboard.\n\nDashboard Components:\nTitle: Employee Performance Overview\nType: chart\nDescription: Visual representation of employee performance metrics over time\nTitle: Top Performing Employees\nType: table\nDescription: List of employees with the highest sales or performance metrics\nTitle: Total Sales by Employee\nType: kpi\nDescription: Aggregate sales figures attributed to each employee\nTitle: Sales Performance by Region\nType: chart\nDescription: Comparison of employee sales performance across different regions\nTitle: Employee Engagement Metrics\nType: chart\nDescription: Metrics related to employee engagement and satisfaction",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Employee Performance Overview",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "FirstName",
+      "y": "TotalSales"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Performing Employees",
+      "type": "table"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Sales by Employee",
+      "type": "kpi"
+    },
+    {
+      "id": "component_4",
+      "title": "Sales Performance by Region",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "Region",
+      "y": "TotalSales"
+    },
+    {
+      "id": "component_5",
+      "title": "Employee Engagement Metrics",
+      "type": "chart",
+      "chart_type": "line",
+      "x": "HireDate",
+      "y": "TotalOrders"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Employee Performance Overview",
+      "type": "chart",
+      "description": "Visual representation of employee performance metrics over time",
+      "sql": "SELECT e.EmployeeID, e.FirstName, e.LastName, COUNT(o.OrderID) AS TotalOrders, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalSales FROM Employees e JOIN Orders o ON e.EmployeeID = o.EmployeeID JOIN 'Order Details' od ON o.OrderID = od.OrderID GROUP BY e.EmployeeID ORDER BY TotalSales DESC"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Performing Employees",
+      "type": "table",
+      "description": "List of employees with the highest sales or performance metrics",
+      "sql": "SELECT e.EmployeeID, e.FirstName, e.LastName, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalSales FROM Employees e JOIN Orders o ON e.EmployeeID = o.EmployeeID JOIN 'Order Details' od ON o.OrderID = od.OrderID GROUP BY e.EmployeeID ORDER BY TotalSales DESC LIMIT 10"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Sales by Employee",
+      "type": "kpi",
+      "description": "Aggregate sales figures attributed to each employee",
+      "sql": "SELECT e.EmployeeID, e.FirstName, e.LastName, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalSales FROM Employees e JOIN Orders o ON e.EmployeeID = o.EmployeeID JOIN 'Order Details' od ON o.OrderID = od.OrderID GROUP BY e.EmployeeID"
+    },
+    {
+      "id": "component_4",
+      "title": "Sales Performance by Region",
+      "type": "chart",
+      "description": "Comparison of employee sales performance across different regions",
+      "sql": "SELECT e.Region, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalSales FROM Employees e JOIN Orders o ON e.EmployeeID = o.EmployeeID JOIN 'Order Details' od ON o.OrderID = od.OrderID GROUP BY e.Region ORDER BY TotalSales DESC"
+    },
+    {
+      "id": "component_5",
+      "title": "Employee Engagement Metrics",
+      "type": "chart",
+      "description": "Metrics related to employee engagement and satisfaction",
+      "sql": "SELECT e.EmployeeID, e.FirstName, e.LastName, e.HireDate, COUNT(o.OrderID) AS TotalOrders FROM Employees e LEFT JOIN Orders o ON e.EmployeeID = o.EmployeeID GROUP BY e.EmployeeID ORDER BY TotalOrders DESC"
+    }
+  ],
+  "timestamp": "2026-07-14T02:29:49.490323"
+}
