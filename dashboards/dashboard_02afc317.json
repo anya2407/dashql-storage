@@ -1,0 +1,115 @@
+{
+  "dashboard_id": "dashboard_02afc317",
+  "request": "Most expensive products.",
+  "search_document": "User Request: Most expensive products.\n\nDashboard Components:\nTitle: Most Expensive Products\nType: table\nDescription: List of products sorted by unit price\nTitle: Product Categories Distribution\nType: pie_chart\nDescription: Distribution of most expensive products by category\nTitle: Total Value of Most Expensive Products\nType: kpi\nDescription: Total value of the top N most expensive products",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Most Expensive Products",
+      "type": "table",
+      "columns": [
+        "ProductID",
+        "ProductName",
+        "UnitPrice"
+      ],
+      "sample_data": [
+        {
+          "ProductID": 38,
+          "ProductName": "C\u00f4te de Blaye",
+          "UnitPrice": 263.5
+        },
+        {
+          "ProductID": 29,
+          "ProductName": "Th\u00fcringer Rostbratwurst",
+          "UnitPrice": 123.79
+        },
+        {
+          "ProductID": 9,
+          "ProductName": "Mishi Kobe Niku",
+          "UnitPrice": 97.0
+        },
+        {
+          "ProductID": 20,
+          "ProductName": "Sir Rodney's Marmalade",
+          "UnitPrice": 81.0
+        },
+        {
+          "ProductID": 18,
+          "ProductName": "Carnarvon Tigers",
+          "UnitPrice": 62.5
+        }
+      ]
+    },
+    {
+      "id": "component_2",
+      "title": "Product Categories Distribution",
+      "type": "pie_chart",
+      "columns": [
+        "CategoryName",
+        "ProductCount"
+      ],
+      "sample_data": [
+        {
+          "CategoryName": "Confections",
+          "ProductCount": 13
+        },
+        {
+          "CategoryName": "Seafood",
+          "ProductCount": 12
+        },
+        {
+          "CategoryName": "Condiments",
+          "ProductCount": 12
+        },
+        {
+          "CategoryName": "Beverages",
+          "ProductCount": 12
+        },
+        {
+          "CategoryName": "Dairy Products",
+          "ProductCount": 10
+        }
+      ],
+      "chart_type": "pie",
+      "x": "CategoryName",
+      "y": "ProductCount"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Value of Most Expensive Products",
+      "type": "kpi",
+      "columns": [
+        "TotalValue"
+      ],
+      "sample_data": [
+        {
+          "TotalValue": 21368.2
+        }
+      ]
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Most Expensive Products",
+      "type": "table",
+      "description": "List of products sorted by unit price",
+      "sql": "SELECT ProductID, ProductName, UnitPrice FROM Products ORDER BY UnitPrice DESC"
+    },
+    {
+      "id": "component_2",
+      "title": "Product Categories Distribution",
+      "type": "pie_chart",
+      "description": "Distribution of most expensive products by category",
+      "sql": "SELECT c.CategoryName, COUNT(p.ProductID) AS ProductCount FROM Products p JOIN Categories c ON p.CategoryID = c.CategoryID GROUP BY c.CategoryName ORDER BY ProductCount DESC"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Value of Most Expensive Products",
+      "type": "kpi",
+      "description": "Total value of the top N most expensive products",
+      "sql": "SELECT SUM(UnitPrice * UnitsInStock) AS TotalValue FROM (SELECT UnitPrice, UnitsInStock FROM Products ORDER BY UnitPrice DESC LIMIT 10)"
+    }
+  ],
+  "timestamp": "2026-07-14T01:30:06.154588"
+}
