@@ -1,0 +1,76 @@
+{
+  "dashboard_id": "dashboard_887066f6",
+  "request": "Freight cost analysis.",
+  "search_document": "User Request: Freight cost analysis.\n\nDashboard Components:\nTitle: Freight Cost Trend\nType: chart\nDescription: Monthly trend of freight costs\nTitle: Freight Costs by Region\nType: table\nDescription: Freight costs aggregated by region\nTitle: Total Freight Costs\nType: kpi\nDescription: Overall freight costs\nTitle: Freight Costs by Shipping Method\nType: chart\nDescription: Freight costs breakdown by shipping method\nTitle: Freight Cost per Order\nType: kpi\nDescription: Average freight cost per order",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Freight Cost Trend",
+      "type": "chart",
+      "chart_type": "line",
+      "x": "Month",
+      "y": "TotalFreight"
+    },
+    {
+      "id": "component_2",
+      "title": "Freight Costs by Region",
+      "type": "table"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Freight Costs",
+      "type": "kpi"
+    },
+    {
+      "id": "component_4",
+      "title": "Freight Costs by Shipping Method",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "CompanyName",
+      "y": "TotalFreight"
+    },
+    {
+      "id": "component_5",
+      "title": "Freight Cost per Order",
+      "type": "kpi"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Freight Cost Trend",
+      "type": "chart",
+      "description": "Monthly trend of freight costs",
+      "sql": "SELECT strftime('%Y-%m', OrderDate) AS Month, SUM(Freight) AS TotalFreight FROM Orders GROUP BY Month ORDER BY Month"
+    },
+    {
+      "id": "component_2",
+      "title": "Freight Costs by Region",
+      "type": "table",
+      "description": "Freight costs aggregated by region",
+      "sql": "SELECT ShipRegion, SUM(Freight) AS TotalFreight FROM Orders GROUP BY ShipRegion ORDER BY TotalFreight DESC"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Freight Costs",
+      "type": "kpi",
+      "description": "Overall freight costs",
+      "sql": "SELECT SUM(Freight) AS TotalFreight FROM Orders"
+    },
+    {
+      "id": "component_4",
+      "title": "Freight Costs by Shipping Method",
+      "type": "chart",
+      "description": "Freight costs breakdown by shipping method",
+      "sql": "SELECT Shippers.CompanyName, SUM(Orders.Freight) AS TotalFreight FROM Orders JOIN Shippers ON Orders.ShipVia = Shippers.ShipperID GROUP BY Shippers.CompanyName ORDER BY TotalFreight DESC"
+    },
+    {
+      "id": "component_5",
+      "title": "Freight Cost per Order",
+      "type": "kpi",
+      "description": "Average freight cost per order",
+      "sql": "SELECT AVG(Freight) AS AverageFreight FROM Orders"
+    }
+  ],
+  "timestamp": "2026-07-14T01:26:16.467934"
+}
