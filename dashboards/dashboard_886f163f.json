@@ -1,0 +1,79 @@
+{
+  "dashboard_id": "dashboard_886f163f",
+  "request": "How well are our suppliers performing?",
+  "search_document": "User Request: How well are our suppliers performing?\n\nDashboard Components:\nTitle: Supplier Performance Overview\nType: chart\nDescription: Visual representation of supplier performance metrics\nTitle: Top Suppliers by Revenue\nType: table\nDescription: List of suppliers ranked by total revenue generated\nTitle: Total Supplier Revenue\nType: kpi\nDescription: Aggregate revenue from all suppliers\nTitle: Supplier Order Fulfillment Rate\nType: chart\nDescription: Percentage of orders fulfilled on time by suppliers\nTitle: Supplier Lead Time\nType: chart\nDescription: Average lead time for suppliers to deliver products",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Supplier Performance Overview",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "CompanyName",
+      "y": "TotalRevenue"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Suppliers by Revenue",
+      "type": "table"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Supplier Revenue",
+      "type": "kpi"
+    },
+    {
+      "id": "component_4",
+      "title": "Supplier Order Fulfillment Rate",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "CompanyName",
+      "y": "FulfillmentRate"
+    },
+    {
+      "id": "component_5",
+      "title": "Supplier Lead Time",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "CompanyName",
+      "y": "AverageLeadTime"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Supplier Performance Overview",
+      "type": "chart",
+      "description": "Visual representation of supplier performance metrics",
+      "sql": "SELECT s.SupplierID, s.CompanyName, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalRevenue FROM Suppliers s JOIN Products p ON s.SupplierID = p.SupplierID JOIN 'Order Details' od ON p.ProductID = od.ProductID GROUP BY s.SupplierID, s.CompanyName"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Suppliers by Revenue",
+      "type": "table",
+      "description": "List of suppliers ranked by total revenue generated",
+      "sql": "SELECT s.SupplierID, s.CompanyName, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalRevenue FROM Suppliers s JOIN Products p ON s.SupplierID = p.SupplierID JOIN 'Order Details' od ON p.ProductID = od.ProductID GROUP BY s.SupplierID, s.CompanyName ORDER BY TotalRevenue DESC LIMIT 10"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Supplier Revenue",
+      "type": "kpi",
+      "description": "Aggregate revenue from all suppliers",
+      "sql": "SELECT SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalRevenue FROM 'Order Details' od JOIN Products p ON od.ProductID = p.ProductID"
+    },
+    {
+      "id": "component_4",
+      "title": "Supplier Order Fulfillment Rate",
+      "type": "chart",
+      "description": "Percentage of orders fulfilled on time by suppliers",
+      "sql": "SELECT s.SupplierID, s.CompanyName, COUNT(o.OrderID) AS TotalOrders, SUM(CASE WHEN o.ShippedDate <= o.RequiredDate THEN 1 ELSE 0 END) AS FulfilledOnTime, (SUM(CASE WHEN o.ShippedDate <= o.RequiredDate THEN 1 ELSE 0 END) * 1.0 / COUNT(o.OrderID)) * 100 AS FulfillmentRate FROM Suppliers s JOIN Products p ON s.SupplierID = p.SupplierID JOIN 'Order Details' od ON p.ProductID = od.ProductID JOIN Orders o ON od.OrderID = o.OrderID GROUP BY s.SupplierID, s.CompanyName"
+    },
+    {
+      "id": "component_5",
+      "title": "Supplier Lead Time",
+      "type": "chart",
+      "description": "Average lead time for suppliers to deliver products",
+      "sql": "SELECT s.SupplierID, s.CompanyName, AVG(julianday(o.ShippedDate) - julianday(o.OrderDate)) AS AverageLeadTime FROM Suppliers s JOIN Products p ON s.SupplierID = p.SupplierID JOIN 'Order Details' od ON p.ProductID = od.ProductID JOIN Orders o ON od.OrderID = o.OrderID WHERE o.ShippedDate IS NOT NULL GROUP BY s.SupplierID, s.CompanyName"
+    }
+  ],
+  "timestamp": "2026-07-14T02:39:10.113115"
+}
