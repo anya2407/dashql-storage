@@ -1,0 +1,49 @@
+{
+  "dashboard_id": "dashboard_d5b0ad27",
+  "request": "Average order value by month.",
+  "search_document": "User Request: Average order value by month.\n\nDashboard Components:\nTitle: Average Order Value by Month\nType: chart\nDescription: Trend of average order value over the months\nTitle: Top Customers by Revenue\nType: table\nDescription: List of customers with the highest total order values\nTitle: Total Revenue\nType: kpi\nDescription: Total revenue generated",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Average Order Value by Month",
+      "type": "chart",
+      "chart_type": "line",
+      "x": "Month",
+      "y": "AverageOrderValue"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Customers by Revenue",
+      "type": "table"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Revenue",
+      "type": "kpi"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Average Order Value by Month",
+      "type": "chart",
+      "description": "Trend of average order value over the months",
+      "sql": "SELECT strftime('%Y-%m', OrderDate) AS Month, AVG(UnitPrice * Quantity * (1 - Discount)) AS AverageOrderValue FROM Orders JOIN \"Order Details\" ON Orders.OrderID = \"Order Details\".OrderID GROUP BY Month ORDER BY Month"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Customers by Revenue",
+      "type": "table",
+      "description": "List of customers with the highest total order values",
+      "sql": "SELECT Customers.CompanyName, SUM(\"Order Details\".UnitPrice * \"Order Details\".Quantity * (1 - \"Order Details\".Discount)) AS TotalRevenue FROM Orders JOIN Customers ON Orders.CustomerID = Customers.CustomerID JOIN \"Order Details\" ON Orders.OrderID = \"Order Details\".OrderID GROUP BY Customers.CompanyName ORDER BY TotalRevenue DESC LIMIT 10"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Revenue",
+      "type": "kpi",
+      "description": "Total revenue generated",
+      "sql": "SELECT SUM(UnitPrice * Quantity * (1 - Discount)) AS TotalRevenue FROM \"Order Details\""
+    }
+  ],
+  "timestamp": "2026-07-14T01:21:03.754284"
+}
