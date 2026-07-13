@@ -1,0 +1,49 @@
+{
+  "dashboard_id": "dashboard_471929f2",
+  "request": "Products by supplier.",
+  "search_document": "User Request: Products by supplier.\n\nDashboard Components:\nTitle: Products by Supplier\nType: bar_chart\nDescription: Distribution of products across different suppliers\nTitle: Supplier Performance\nType: table\nDescription: List of suppliers with total products supplied\nTitle: Total Products\nType: kpi\nDescription: Overall count of products available",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Products by Supplier",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "CompanyName",
+      "y": "ProductCount"
+    },
+    {
+      "id": "component_2",
+      "title": "Supplier Performance",
+      "type": "table"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Products",
+      "type": "kpi"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Products by Supplier",
+      "type": "bar_chart",
+      "description": "Distribution of products across different suppliers",
+      "sql": "SELECT s.CompanyName, COUNT(p.ProductID) AS ProductCount FROM Suppliers s JOIN Products p ON s.SupplierID = p.SupplierID GROUP BY s.CompanyName"
+    },
+    {
+      "id": "component_2",
+      "title": "Supplier Performance",
+      "type": "table",
+      "description": "List of suppliers with total products supplied",
+      "sql": "SELECT s.CompanyName, COUNT(p.ProductID) AS TotalProducts FROM Suppliers s JOIN Products p ON s.SupplierID = p.SupplierID GROUP BY s.CompanyName"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Products",
+      "type": "kpi",
+      "description": "Overall count of products available",
+      "sql": "SELECT COUNT(ProductID) AS TotalProducts FROM Products"
+    }
+  ],
+  "timestamp": "2026-07-14T02:28:52.509102"
+}
