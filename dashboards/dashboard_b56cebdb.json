@@ -1,0 +1,49 @@
+{
+  "dashboard_id": "dashboard_b56cebdb",
+  "request": "Suppliers by country.",
+  "search_document": "User Request: Suppliers by country.\n\nDashboard Components:\nTitle: Suppliers by Country\nType: chart\nDescription: Distribution of suppliers across different countries\nTitle: Top Supplier Categories\nType: table\nDescription: Categories of suppliers with the highest count\nTitle: Total Number of Suppliers\nType: kpi\nDescription: Overall count of suppliers",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Suppliers by Country",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "Country",
+      "y": "SupplierCount"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Supplier Categories",
+      "type": "table"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Number of Suppliers",
+      "type": "kpi"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Suppliers by Country",
+      "type": "chart",
+      "description": "Distribution of suppliers across different countries",
+      "sql": "SELECT \"Country\", COUNT(\"SupplierID\") AS \"SupplierCount\" FROM \"Suppliers\" GROUP BY \"Country\" ORDER BY \"SupplierCount\" DESC"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Supplier Categories",
+      "type": "table",
+      "description": "Categories of suppliers with the highest count",
+      "sql": "SELECT \"Categories\".\"CategoryName\", COUNT(\"Products\".\"SupplierID\") AS \"SupplierCount\" FROM \"Products\" JOIN \"Categories\" ON \"Products\".\"CategoryID\" = \"Categories\".\"CategoryID\" GROUP BY \"Categories\".\"CategoryName\" ORDER BY \"SupplierCount\" DESC"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Number of Suppliers",
+      "type": "kpi",
+      "description": "Overall count of suppliers",
+      "sql": "SELECT COUNT(\"SupplierID\") AS \"TotalSuppliers\" FROM \"Suppliers\""
+    }
+  ],
+  "timestamp": "2026-07-14T03:56:55.448575"
+}
