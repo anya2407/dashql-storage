@@ -1,0 +1,89 @@
+{
+  "dashboard_id": "dashboard_d5260767",
+  "request": "Show customer names next to their total spending.",
+  "search_document": "User Request: Show customer names next to their total spending.\n\nDashboard Components:\nTitle: Monthly Revenue\nType: chart\nDescription: Monthly revenue trend\nTitle: Top Customers by Spending\nType: table\nDescription: Highest spending customers aggregated by region\nTitle: Total Revenue\nType: kpi\nDescription: Overall revenue",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Monthly Revenue",
+      "type": "chart",
+      "chart_type": "line",
+      "x": "Month",
+      "y": "Revenue"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Customers by Spending",
+      "type": "table",
+      "columns": [
+        "CompanyName",
+        "Region",
+        "TotalSpending"
+      ],
+      "sample_data": [
+        {
+          "CompanyName": "IT",
+          "Region": null,
+          "TotalSpending": 9745371.29
+        },
+        {
+          "CompanyName": "B's Beverages",
+          "Region": "British Isles",
+          "TotalSpending": 6154115.34
+        },
+        {
+          "CompanyName": "Hungry Coyote Import Store",
+          "Region": "North America",
+          "TotalSpending": 5698023.67
+        },
+        {
+          "CompanyName": "Rancho grande",
+          "Region": "South America",
+          "TotalSpending": 5559110.08
+        },
+        {
+          "CompanyName": "Gourmet Lanchonetes",
+          "Region": "South America",
+          "TotalSpending": 5552309.805
+        }
+      ]
+    },
+    {
+      "id": "component_3",
+      "title": "Total Revenue",
+      "type": "kpi",
+      "columns": [
+        "TotalRevenue"
+      ],
+      "sample_data": [
+        {
+          "TotalRevenue": 448386633.1695
+        }
+      ]
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Monthly Revenue",
+      "type": "chart",
+      "description": "Monthly revenue trend",
+      "sql": "SELECT strftime('%Y-%m', OrderDate) AS Month, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS Revenue FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY Month ORDER BY Month"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Customers by Spending",
+      "type": "table",
+      "description": "Highest spending customers aggregated by region",
+      "sql": "SELECT c.CompanyName, c.Region, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalSpending FROM Customers c JOIN Orders o ON c.CustomerID = o.CustomerID JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY c.CompanyName, c.Region ORDER BY TotalSpending DESC LIMIT 10"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Revenue",
+      "type": "kpi",
+      "description": "Overall revenue",
+      "sql": "SELECT SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalRevenue FROM \"Order Details\" od"
+    }
+  ],
+  "timestamp": "2026-07-14T02:37:41.833348"
+}
