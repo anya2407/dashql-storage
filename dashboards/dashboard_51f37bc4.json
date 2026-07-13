@@ -1,0 +1,49 @@
+{
+  "dashboard_id": "dashboard_51f37bc4",
+  "request": "Revenue by country.",
+  "search_document": "User Request: Revenue by country.\n\nDashboard Components:\nTitle: Revenue by Country\nType: chart\nDescription: Revenue distribution across different countries\nTitle: Top Countries by Revenue\nType: table\nDescription: Countries with the highest revenue\nTitle: Total Revenue\nType: kpi\nDescription: Overall revenue across all countries",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Revenue by Country",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "ShipCountry",
+      "y": "Revenue"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Countries by Revenue",
+      "type": "table"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Revenue",
+      "type": "kpi"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Revenue by Country",
+      "type": "chart",
+      "description": "Revenue distribution across different countries",
+      "sql": "SELECT o.ShipCountry, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS Revenue FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY o.ShipCountry"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Countries by Revenue",
+      "type": "table",
+      "description": "Countries with the highest revenue",
+      "sql": "SELECT o.ShipCountry, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS Revenue FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY o.ShipCountry ORDER BY Revenue DESC LIMIT 5"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Revenue",
+      "type": "kpi",
+      "description": "Overall revenue across all countries",
+      "sql": "SELECT SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalRevenue FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID"
+    }
+  ],
+  "timestamp": "2026-07-14T03:11:38.463394"
+}
