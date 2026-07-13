@@ -1,0 +1,64 @@
+{
+  "dashboard_id": "dashboard_d156e20b",
+  "request": "Give me a general overview of our customers.",
+  "search_document": "User Request: Give me a general overview of our customers.\n\nDashboard Components:\nTitle: Customer Distribution by Region\nType: chart\nDescription: Overview of customers segmented by geographical regions\nTitle: Customer Demographics\nType: table\nDescription: Summary of customer types and their descriptions\nTitle: Total Number of Customers\nType: kpi\nDescription: Total count of unique customers\nTitle: Customer Growth Over Time\nType: chart\nDescription: Trend of new customers acquired over the last year",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Customer Distribution by Region",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "Region",
+      "y": "CustomerCount"
+    },
+    {
+      "id": "component_2",
+      "title": "Customer Demographics",
+      "type": "table"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Number of Customers",
+      "type": "kpi"
+    },
+    {
+      "id": "component_4",
+      "title": "Customer Growth Over Time",
+      "type": "chart",
+      "chart_type": "line",
+      "x": "Time",
+      "y": "CustomerCount"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Customer Distribution by Region",
+      "type": "chart",
+      "description": "Overview of customers segmented by geographical regions",
+      "sql": "SELECT \"Region\", COUNT(\"CustomerID\") AS CustomerCount FROM \"Customers\" GROUP BY \"Region\""
+    },
+    {
+      "id": "component_2",
+      "title": "Customer Demographics",
+      "type": "table",
+      "description": "Summary of customer types and their descriptions",
+      "sql": "SELECT \"CustomerDemographics\".\"CustomerTypeID\", \"CustomerDesc\" FROM \"CustomerDemographics\""
+    },
+    {
+      "id": "component_3",
+      "title": "Total Number of Customers",
+      "type": "kpi",
+      "description": "Total count of unique customers",
+      "sql": "SELECT COUNT(DISTINCT \"CustomerID\") AS TotalCustomers FROM \"Customers\""
+    },
+    {
+      "id": "component_4",
+      "title": "Customer Growth Over Time",
+      "type": "chart",
+      "description": "Trend of new customers acquired over the last year",
+      "sql": "SELECT strftime('%Y-%m', \"OrderDate\") AS OrderMonth, COUNT(DISTINCT \"CustomerID\") AS NewCustomers FROM \"Orders\" WHERE \"OrderDate\" >= date('now', '-1 year') GROUP BY OrderMonth ORDER BY OrderMonth"
+    }
+  ],
+  "timestamp": "2026-07-14T04:01:21.977864"
+}
