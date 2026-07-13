@@ -1,0 +1,49 @@
+{
+  "dashboard_id": "dashboard_3ee04b5d",
+  "request": "Products per supplier.",
+  "search_document": "User Request: Products per supplier.\n\nDashboard Components:\nTitle: Products per Supplier\nType: chart\nDescription: Distribution of products across suppliers\nTitle: Supplier Overview\nType: table\nDescription: List of suppliers with product counts\nTitle: Total Products\nType: kpi\nDescription: Total number of products available",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Products per Supplier",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "CompanyName",
+      "y": "ProductCount"
+    },
+    {
+      "id": "component_2",
+      "title": "Supplier Overview",
+      "type": "table"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Products",
+      "type": "kpi"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Products per Supplier",
+      "type": "chart",
+      "description": "Distribution of products across suppliers",
+      "sql": "SELECT s.CompanyName, COUNT(p.ProductID) AS ProductCount FROM Suppliers s LEFT JOIN Products p ON s.SupplierID = p.SupplierID GROUP BY s.CompanyName ORDER BY ProductCount DESC"
+    },
+    {
+      "id": "component_2",
+      "title": "Supplier Overview",
+      "type": "table",
+      "description": "List of suppliers with product counts",
+      "sql": "SELECT s.SupplierID, s.CompanyName, s.ContactTitle, s.City, s.Region, s.PostalCode, s.Country, COUNT(p.ProductID) AS ProductCount FROM Suppliers s LEFT JOIN Products p ON s.SupplierID = p.SupplierID GROUP BY s.SupplierID, s.CompanyName, s.ContactTitle, s.City, s.Region, s.PostalCode, s.Country ORDER BY s.CompanyName"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Products",
+      "type": "kpi",
+      "description": "Total number of products available",
+      "sql": "SELECT COUNT(ProductID) AS TotalProducts FROM Products"
+    }
+  ],
+  "timestamp": "2026-07-14T00:42:00.123340"
+}
