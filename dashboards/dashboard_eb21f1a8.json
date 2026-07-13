@@ -1,0 +1,89 @@
+{
+  "dashboard_id": "dashboard_eb21f1a8",
+  "request": "Show monthly sales revenue.",
+  "search_document": "User Request: Show monthly sales revenue.\n\nDashboard Components:\nTitle: Monthly Revenue\nType: chart\nDescription: Monthly revenue trend\nTitle: Top Customers by Region\nType: table\nDescription: Highest spending customers aggregated by region\nTitle: Total Revenue\nType: kpi\nDescription: Overall revenue",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Monthly Revenue",
+      "type": "chart",
+      "chart_type": "line",
+      "x": "Month",
+      "y": "Revenue"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Customers by Region",
+      "type": "table",
+      "columns": [
+        "Region",
+        "CompanyName",
+        "TotalSpending"
+      ],
+      "sample_data": [
+        {
+          "Region": null,
+          "CompanyName": "IT",
+          "TotalSpending": 9745371.29
+        },
+        {
+          "Region": "British Isles",
+          "CompanyName": "B's Beverages",
+          "TotalSpending": 6154115.34
+        },
+        {
+          "Region": "British Isles",
+          "CompanyName": "Consolidated Holdings",
+          "TotalSpending": 4931207.19
+        },
+        {
+          "Region": "British Isles",
+          "CompanyName": "Island Trading",
+          "TotalSpending": 4885549.18
+        },
+        {
+          "Region": "British Isles",
+          "CompanyName": "Seven Seas Imports",
+          "TotalSpending": 4749839.215
+        }
+      ]
+    },
+    {
+      "id": "component_3",
+      "title": "Total Revenue",
+      "type": "kpi",
+      "columns": [
+        "TotalRevenue"
+      ],
+      "sample_data": [
+        {
+          "TotalRevenue": 448386633.1695
+        }
+      ]
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Monthly Revenue",
+      "type": "chart",
+      "description": "Monthly revenue trend",
+      "sql": "SELECT strftime('%Y-%m', OrderDate) AS Month, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS Revenue FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY Month ORDER BY Month"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Customers by Region",
+      "type": "table",
+      "description": "Highest spending customers aggregated by region",
+      "sql": "SELECT c.Region, c.CompanyName, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalSpending FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID JOIN Customers c ON o.CustomerID = c.CustomerID GROUP BY c.Region, c.CompanyName ORDER BY c.Region, TotalSpending DESC"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Revenue",
+      "type": "kpi",
+      "description": "Overall revenue",
+      "sql": "SELECT SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalRevenue FROM \"Order Details\" od"
+    }
+  ],
+  "timestamp": "2026-07-14T03:45:39.749903"
+}
