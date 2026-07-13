@@ -1,0 +1,48 @@
+{
+  "dashboard_id": "dashboard_ec019032",
+  "request": "Show me sales trends for 2013 only",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Monthly Revenue",
+      "type": "chart",
+      "chart_type": "line",
+      "x": "Month",
+      "y": "Revenue"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Customers by Revenue",
+      "type": "table"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Revenue for 2013",
+      "type": "kpi"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Monthly Revenue",
+      "type": "chart",
+      "description": "Monthly revenue trend for 2013",
+      "sql": "SELECT strftime('%Y-%m', OrderDate) AS Month, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS Revenue FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID WHERE strftime('%Y', OrderDate) = '2013' GROUP BY Month ORDER BY Month"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Customers by Revenue",
+      "type": "table",
+      "description": "Highest spending customers in 2013",
+      "sql": "SELECT c.CompanyName, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS Revenue FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID JOIN Customers c ON o.CustomerID = c.CustomerID WHERE strftime('%Y', OrderDate) = '2013' GROUP BY c.CompanyName ORDER BY Revenue DESC"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Revenue for 2013",
+      "type": "kpi",
+      "description": "Overall revenue for the year 2013",
+      "sql": "SELECT SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalRevenue FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID WHERE strftime('%Y', OrderDate) = '2013'"
+    }
+  ],
+  "timestamp": "2026-07-13T16:40:58.265798"
+}
