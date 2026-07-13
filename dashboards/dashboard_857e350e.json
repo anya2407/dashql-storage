@@ -1,0 +1,95 @@
+{
+  "dashboard_id": "dashboard_857e350e",
+  "request": "Top revenue months.",
+  "search_document": "User Request: Top revenue months.\n\nDashboard Components:\nTitle: Monthly Revenue\nType: chart\nDescription: Monthly revenue trend\nTitle: Top Customers by Revenue\nType: table\nDescription: Highest spending customers aggregated by region\nTitle: Total Revenue\nType: kpi\nDescription: Overall revenue for the selected period",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Monthly Revenue",
+      "type": "chart",
+      "chart_type": "line",
+      "x": "Month",
+      "y": "Revenue"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Customers by Revenue",
+      "type": "table",
+      "columns": [
+        "CustomerID",
+        "CompanyName",
+        "Region",
+        "Revenue"
+      ],
+      "sample_data": [
+        {
+          "CustomerID": "BSBEV",
+          "CompanyName": "B's Beverages",
+          "Region": "British Isles",
+          "Revenue": 6154115.34
+        },
+        {
+          "CustomerID": "HUNGC",
+          "CompanyName": "Hungry Coyote Import Store",
+          "Region": "North America",
+          "Revenue": 5698023.67
+        },
+        {
+          "CustomerID": "RANCH",
+          "CompanyName": "Rancho grande",
+          "Region": "South America",
+          "Revenue": 5559110.08
+        },
+        {
+          "CustomerID": "GOURL",
+          "CompanyName": "Gourmet Lanchonetes",
+          "Region": "South America",
+          "Revenue": 5552309.805
+        },
+        {
+          "CustomerID": "ANATR",
+          "CompanyName": "Ana Trujillo Emparedados y helados",
+          "Region": "Central America",
+          "Revenue": 5534356.65
+        }
+      ]
+    },
+    {
+      "id": "component_3",
+      "title": "Total Revenue",
+      "type": "kpi",
+      "columns": [
+        "TotalRevenue"
+      ],
+      "sample_data": [
+        {
+          "TotalRevenue": 448386633.1695
+        }
+      ]
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Monthly Revenue",
+      "type": "chart",
+      "description": "Monthly revenue trend",
+      "sql": "SELECT strftime('%Y-%m', OrderDate) AS Month, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS Revenue FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY Month ORDER BY Month"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Customers by Revenue",
+      "type": "table",
+      "description": "Highest spending customers aggregated by region",
+      "sql": "SELECT c.CustomerID, c.CompanyName, c.Region, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS Revenue FROM Customers c JOIN Orders o ON c.CustomerID = o.CustomerID JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY c.CustomerID, c.CompanyName, c.Region ORDER BY Revenue DESC LIMIT 10"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Revenue",
+      "type": "kpi",
+      "description": "Overall revenue for the selected period",
+      "sql": "SELECT SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalRevenue FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID"
+    }
+  ],
+  "timestamp": "2026-07-14T02:21:55.757902"
+}
