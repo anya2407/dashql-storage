@@ -1,0 +1,49 @@
+{
+  "dashboard_id": "dashboard_3cfeef7b",
+  "request": "Orders per month in 1996",
+  "search_document": "User Request: Orders per month in 1996\n\nDashboard Components:\nTitle: Orders per Month in 1996\nType: chart\nDescription: Trend of orders placed each month in 1996\nTitle: Monthly Order Count\nType: table\nDescription: Total number of orders per month in 1996\nTitle: Total Orders in 1996\nType: kpi\nDescription: Overall number of orders placed in 1996",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Orders per Month in 1996",
+      "type": "chart",
+      "chart_type": "line",
+      "x": "Month",
+      "y": "Orders"
+    },
+    {
+      "id": "component_2",
+      "title": "Monthly Order Count",
+      "type": "table"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Orders in 1996",
+      "type": "kpi"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Orders per Month in 1996",
+      "type": "chart",
+      "description": "Trend of orders placed each month in 1996",
+      "sql": "SELECT strftime('%Y-%m', OrderDate) AS OrderMonth, COUNT(OrderID) AS OrderCount FROM Orders WHERE strftime('%Y', OrderDate) = '1996' GROUP BY OrderMonth ORDER BY OrderMonth"
+    },
+    {
+      "id": "component_2",
+      "title": "Monthly Order Count",
+      "type": "table",
+      "description": "Total number of orders per month in 1996",
+      "sql": "SELECT strftime('%Y-%m', OrderDate) AS OrderMonth, COUNT(OrderID) AS OrderCount FROM Orders WHERE strftime('%Y', OrderDate) = '1996' GROUP BY OrderMonth ORDER BY OrderMonth"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Orders in 1996",
+      "type": "kpi",
+      "description": "Overall number of orders placed in 1996",
+      "sql": "SELECT COUNT(OrderID) AS TotalOrders FROM Orders WHERE strftime('%Y', OrderDate) = '1996'"
+    }
+  ],
+  "timestamp": "2026-09-09T13:25:35.590896"
+}
