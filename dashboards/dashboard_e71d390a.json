@@ -1,0 +1,49 @@
+{
+  "dashboard_id": "dashboard_e71d390a",
+  "request": "orders per month in 1997",
+  "search_document": "User Request: orders per month in 1997\n\nDashboard Components:\nTitle: Monthly Orders in 1997\nType: chart\nDescription: Trend of orders placed each month in 1997\nTitle: Top Products by Orders in 1997\nType: table\nDescription: Products with the highest number of orders in 1997\nTitle: Total Orders in 1997\nType: kpi\nDescription: Total number of orders placed in 1997",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Monthly Orders in 1997",
+      "type": "chart",
+      "chart_type": "line",
+      "x": "Month",
+      "y": "Orders"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Products by Orders in 1997",
+      "type": "table"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Orders in 1997",
+      "type": "kpi"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Monthly Orders in 1997",
+      "type": "chart",
+      "description": "Trend of orders placed each month in 1997",
+      "sql": "SELECT strftime('%Y-%m', OrderDate) AS Month, COUNT(OrderID) AS OrderCount FROM Orders WHERE strftime('%Y', OrderDate) = '1997' GROUP BY Month ORDER BY Month"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Products by Orders in 1997",
+      "type": "table",
+      "description": "Products with the highest number of orders in 1997",
+      "sql": "SELECT p.ProductName, COUNT(od.OrderID) AS OrderCount FROM 'Order Details' od JOIN Orders o ON od.OrderID = o.OrderID JOIN Products p ON od.ProductID = p.ProductID WHERE strftime('%Y', o.OrderDate) = '1997' GROUP BY p.ProductID ORDER BY OrderCount DESC LIMIT 10"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Orders in 1997",
+      "type": "kpi",
+      "description": "Total number of orders placed in 1997",
+      "sql": "SELECT COUNT(OrderID) AS TotalOrders FROM Orders WHERE strftime('%Y', OrderDate) = '1997'"
+    }
+  ],
+  "timestamp": "2026-09-09T13:28:58.351935"
+}
