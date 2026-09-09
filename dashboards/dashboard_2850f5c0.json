@@ -1,0 +1,121 @@
+{
+  "dashboard_id": "dashboard_2850f5c0",
+  "request": "What dashboards are already available",
+  "search_document": "User Request: What dashboards are already available\n\nDashboard Components:\nTitle: Monthly Revenue\nType: chart\nDescription: Monthly revenue trend\nTitle: Top Customers by Region\nType: table\nDescription: Highest spending customers aggregated by region\nTitle: Total Revenue\nType: kpi\nDescription: Overall revenue\nTitle: Sales by Product Category\nType: chart\nDescription: Revenue breakdown by product category\nTitle: Order Fulfillment Status\nType: chart\nDescription: Status of orders (shipped, pending, etc.)\nTitle: Employee Performance\nType: table\nDescription: Sales performance metrics for employees\nTitle: Inventory Levels\nType: chart\nDescription: Current inventory levels by product\nTitle: Customer Demographics\nType: chart\nDescription: Overview of customer demographics",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Monthly Revenue",
+      "type": "chart",
+      "chart_type": "line",
+      "x": "Month",
+      "y": "Revenue"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Customers by Region",
+      "type": "table"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Revenue",
+      "type": "kpi"
+    },
+    {
+      "id": "component_4",
+      "title": "Sales by Product Category",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "CategoryName",
+      "y": "Revenue"
+    },
+    {
+      "id": "component_5",
+      "title": "Order Fulfillment Status",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "Status",
+      "y": "OrderCount"
+    },
+    {
+      "id": "component_6",
+      "title": "Employee Performance",
+      "type": "table"
+    },
+    {
+      "id": "component_7",
+      "title": "Inventory Levels",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "ProductName",
+      "y": "UnitsInStock"
+    },
+    {
+      "id": "component_8",
+      "title": "Customer Demographics",
+      "type": "chart",
+      "chart_type": "pie",
+      "x": null,
+      "y": null
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Monthly Revenue",
+      "type": "chart",
+      "description": "Monthly revenue trend",
+      "sql": "SELECT strftime('%Y-%m', OrderDate) AS Month, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS Revenue FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY Month ORDER BY Month"
+    },
+    {
+      "id": "component_2",
+      "title": "Top Customers by Region",
+      "type": "table",
+      "description": "Highest spending customers aggregated by region",
+      "sql": "SELECT c.Region, c.CompanyName, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalSpending FROM Orders o JOIN Customers c ON o.CustomerID = c.CustomerID JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY c.Region, c.CompanyName ORDER BY c.Region, TotalSpending DESC"
+    },
+    {
+      "id": "component_3",
+      "title": "Total Revenue",
+      "type": "kpi",
+      "description": "Overall revenue",
+      "sql": "SELECT SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalRevenue FROM \"Order Details\" od"
+    },
+    {
+      "id": "component_4",
+      "title": "Sales by Product Category",
+      "type": "chart",
+      "description": "Revenue breakdown by product category",
+      "sql": "SELECT cat.CategoryName, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS Revenue FROM \"Order Details\" od JOIN Products p ON od.ProductID = p.ProductID JOIN Categories cat ON p.CategoryID = cat.CategoryID GROUP BY cat.CategoryName ORDER BY Revenue DESC"
+    },
+    {
+      "id": "component_5",
+      "title": "Order Fulfillment Status",
+      "type": "chart",
+      "description": "Status of orders (shipped, pending, etc.)",
+      "sql": "SELECT CASE WHEN o.ShippedDate IS NOT NULL THEN 'Shipped' ELSE 'Pending' END AS Status, COUNT(*) AS OrderCount FROM Orders o GROUP BY Status"
+    },
+    {
+      "id": "component_6",
+      "title": "Employee Performance",
+      "type": "table",
+      "description": "Sales performance metrics for employees",
+      "sql": "SELECT e.EmployeeID, e.FirstName || ' ' || e.LastName AS EmployeeName, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalSales FROM Orders o JOIN Employees e ON o.EmployeeID = e.EmployeeID JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY e.EmployeeID ORDER BY TotalSales DESC"
+    },
+    {
+      "id": "component_7",
+      "title": "Inventory Levels",
+      "type": "chart",
+      "description": "Current inventory levels by product",
+      "sql": "SELECT p.ProductName, p.UnitsInStock FROM Products p ORDER BY p.UnitsInStock DESC"
+    },
+    {
+      "id": "component_8",
+      "title": "Customer Demographics",
+      "type": "chart",
+      "description": "Overview of customer demographics",
+      "sql": "SELECT cd.CustomerDesc, COUNT(ccd.CustomerID) AS CustomerCount FROM CustomerDemographics cd JOIN CustomerCustomerDemo ccd ON cd.CustomerTypeID = ccd.CustomerTypeID GROUP BY cd.CustomerDesc"
+    }
+  ],
+  "timestamp": "2026-09-09T12:30:28.804855"
+}
