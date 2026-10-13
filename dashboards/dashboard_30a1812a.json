@@ -1,0 +1,75 @@
+{
+  "dashboard_id": "dashboard_30a1812a",
+  "request": "Show each order with the employee responsible for it.",
+  "search_document": "User Request: Show each order with the employee responsible for it.\n\nDashboard Components:\nTitle: Orders Overview\nType: table\nDescription: List of orders with associated employee responsible\nTitle: Employee Performance\nType: chart\nDescription: Performance metrics of employees based on orders handled",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Orders Overview",
+      "type": "table",
+      "columns": [
+        "OrderID",
+        "OrderDate",
+        "ShipName",
+        "EmployeeName"
+      ],
+      "sample_data": [
+        {
+          "OrderID": 10248,
+          "OrderDate": "2016-07-04",
+          "ShipName": "Vins et alcools Chevalier",
+          "EmployeeName": "Steven Buchanan"
+        },
+        {
+          "OrderID": 10249,
+          "OrderDate": "2016-07-05",
+          "ShipName": "Toms Spezialit\u00e4ten",
+          "EmployeeName": "Michael Suyama"
+        },
+        {
+          "OrderID": 10250,
+          "OrderDate": "2016-07-08",
+          "ShipName": "Hanari Carnes",
+          "EmployeeName": "Margaret Peacock"
+        },
+        {
+          "OrderID": 10251,
+          "OrderDate": "2016-07-08",
+          "ShipName": "Victuailles en stock",
+          "EmployeeName": "Janet Leverling"
+        },
+        {
+          "OrderID": 10252,
+          "OrderDate": "2016-07-09",
+          "ShipName": "Supr\u00eames d\u00e9lices",
+          "EmployeeName": "Margaret Peacock"
+        }
+      ]
+    },
+    {
+      "id": "component_2",
+      "title": "Employee Performance",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "EmployeeName",
+      "y": "OrdersHandled"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Orders Overview",
+      "type": "table",
+      "description": "List of orders with associated employee responsible",
+      "sql": "SELECT o.OrderID, o.OrderDate, o.ShipName, e.FirstName || ' ' || e.LastName AS EmployeeName FROM Orders o JOIN Employees e ON o.EmployeeID = e.EmployeeID"
+    },
+    {
+      "id": "component_2",
+      "title": "Employee Performance",
+      "type": "chart",
+      "description": "Performance metrics of employees based on orders handled",
+      "sql": "SELECT e.EmployeeID, e.FirstName || ' ' || e.LastName AS EmployeeName, COUNT(o.OrderID) AS OrdersHandled FROM Employees e LEFT JOIN Orders o ON e.EmployeeID = o.EmployeeID GROUP BY e.EmployeeID, e.FirstName, e.LastName"
+    }
+  ],
+  "timestamp": "2026-10-14T01:41:06.112968"
+}
