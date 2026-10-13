@@ -1,0 +1,25 @@
+{
+  "dashboard_id": "dashboard_8e03606e",
+  "request": "Show total revenue by product category, from highest to lowest.",
+  "search_document": "User Request: Show total revenue by product category, from highest to lowest.\n\nDashboard Components:\nTitle: Total Revenue by Product Category\nType: chart\nDescription: Total revenue aggregated by product category, displayed from highest to lowest.",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Total Revenue by Product Category",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "CategoryName",
+      "y": "TotalRevenue"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Total Revenue by Product Category",
+      "type": "chart",
+      "description": "Total revenue aggregated by product category, displayed from highest to lowest.",
+      "sql": "SELECT c.CategoryName, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalRevenue FROM 'Order Details' od JOIN Products p ON od.ProductID = p.ProductID JOIN Categories c ON p.CategoryID = c.CategoryID GROUP BY c.CategoryName ORDER BY TotalRevenue DESC"
+    }
+  ],
+  "timestamp": "2026-10-14T01:44:17.193602"
+}
