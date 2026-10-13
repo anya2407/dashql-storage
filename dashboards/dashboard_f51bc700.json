@@ -1,0 +1,110 @@
+{
+  "dashboard_id": "dashboard_f51bc700",
+  "request": "Show recent orders.",
+  "search_document": "User Request: Show recent orders.\n\nDashboard Components:\nTitle: Recent Orders\nType: table\nDescription: List of recent orders with order ID, customer, order date, and total amount\nTitle: Total Orders\nType: metric\nDescription: Total number of orders placed in the last month\nTitle: Orders by Status\nType: pie_chart\nDescription: Distribution of orders by their shipping status\nTitle: Top Customers\nType: bar_chart\nDescription: Top customers by total order value in the last month",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Recent Orders",
+      "type": "table",
+      "columns": [
+        "OrderID",
+        "Customer",
+        "OrderDate",
+        "TotalAmount"
+      ],
+      "sample_data": [
+        {
+          "OrderID": 13724,
+          "Customer": "Maison Dewey",
+          "OrderDate": "2023-10-28 00:09:48",
+          "TotalAmount": 10959.039999999999
+        },
+        {
+          "OrderID": 25677,
+          "Customer": "B\u00f3lido Comidas preparadas",
+          "OrderDate": "2023-10-27 18:17:38",
+          "TotalAmount": 27159.69
+        },
+        {
+          "OrderID": 13789,
+          "Customer": "Morgenstern Gesundkost",
+          "OrderDate": "2023-10-27 06:38:44",
+          "TotalAmount": 51375.33
+        },
+        {
+          "OrderID": 23676,
+          "Customer": "Romero y tomillo",
+          "OrderDate": "2023-10-26 06:28:53",
+          "TotalAmount": 60918.659999999996
+        },
+        {
+          "OrderID": 11298,
+          "Customer": "White Clover Markets",
+          "OrderDate": "2023-10-25 13:00:29",
+          "TotalAmount": 34282.53
+        }
+      ]
+    },
+    {
+      "id": "component_2",
+      "title": "Total Orders",
+      "type": "metric",
+      "columns": [
+        "TotalOrders"
+      ],
+      "sample_data": [
+        {
+          "TotalOrders": 0
+        }
+      ]
+    },
+    {
+      "id": "component_3",
+      "title": "Orders by Status",
+      "type": "pie_chart",
+      "chart_type": "pie",
+      "x": "Status",
+      "y": "OrderCount"
+    },
+    {
+      "id": "component_4",
+      "title": "Top Customers",
+      "type": "bar_chart",
+      "chart_type": "bar",
+      "x": "Customer",
+      "y": "OrderCount"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Recent Orders",
+      "type": "table",
+      "description": "List of recent orders with order ID, customer, order date, and total amount",
+      "sql": "SELECT o.OrderID, c.CompanyName AS Customer, o.OrderDate, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalAmount FROM Orders o JOIN Customers c ON o.CustomerID = c.CustomerID JOIN 'Order Details' od ON o.OrderID = od.OrderID GROUP BY o.OrderID, c.CompanyName, o.OrderDate ORDER BY o.OrderDate DESC LIMIT 10"
+    },
+    {
+      "id": "component_2",
+      "title": "Total Orders",
+      "type": "metric",
+      "description": "Total number of orders placed in the last month",
+      "sql": "SELECT COUNT(*) AS TotalOrders FROM Orders WHERE OrderDate >= date('now', '-1 month')"
+    },
+    {
+      "id": "component_3",
+      "title": "Orders by Status",
+      "type": "pie_chart",
+      "description": "Distribution of orders by their shipping status",
+      "sql": "SELECT CASE WHEN ShippedDate IS NOT NULL THEN 'Shipped' ELSE 'Pending' END AS Status, COUNT(*) AS OrderCount FROM Orders GROUP BY Status"
+    },
+    {
+      "id": "component_4",
+      "title": "Top Customers",
+      "type": "bar_chart",
+      "description": "Top customers by total order value in the last month",
+      "sql": "SELECT c.CompanyName, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalOrderValue FROM Orders o JOIN Customers c ON o.CustomerID = c.CustomerID JOIN 'Order Details' od ON o.OrderID = od.OrderID WHERE o.OrderDate >= date('now', '-1 month') GROUP BY c.CompanyName ORDER BY TotalOrderValue DESC LIMIT 5"
+    }
+  ],
+  "timestamp": "2026-10-14T01:52:30.885365"
+}
