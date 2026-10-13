@@ -1,0 +1,153 @@
+{
+  "dashboard_id": "dashboard_7931f6d2",
+  "request": "Create a customer orders dashboard filtered to France.",
+  "search_document": "User Request: Create a customer orders dashboard filtered to France.\n\nDashboard Components:\nTitle: Total Orders\nType: metric\nDescription: Total number of orders placed by customers in France\nTitle: Monthly Revenue\nType: chart\nDescription: Monthly revenue trend from orders in France\nTitle: Top Products\nType: table\nDescription: List of top-selling products in France\nTitle: Order Status Distribution\nType: pie_chart\nDescription: Distribution of order statuses for orders in France\nTitle: Customer Demographics\nType: bar_chart\nDescription: Demographics of customers placing orders in France\nTitle: Shipping Methods Used\nType: bar_chart\nDescription: Distribution of shipping methods used for orders in France",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Total Orders",
+      "type": "metric",
+      "columns": [
+        "TotalOrders"
+      ],
+      "sample_data": [
+        {
+          "TotalOrders": 1909
+        }
+      ]
+    },
+    {
+      "id": "component_2",
+      "title": "Monthly Revenue",
+      "type": "chart",
+      "chart_type": "line",
+      "x": "Month",
+      "y": "Revenue"
+    },
+    {
+      "id": "component_3",
+      "title": "Top Products",
+      "type": "table",
+      "columns": [
+        "ProductName",
+        "TotalQuantity"
+      ],
+      "sample_data": [
+        {
+          "ProductName": "Spegesild",
+          "TotalQuantity": 25319
+        },
+        {
+          "ProductName": "Carnarvon Tigers",
+          "TotalQuantity": 25116
+        },
+        {
+          "ProductName": "Gorgonzola Telino",
+          "TotalQuantity": 25106
+        },
+        {
+          "ProductName": "Konbu",
+          "TotalQuantity": 25100
+        },
+        {
+          "ProductName": "Rh\u00f6nbr\u00e4u Klosterbier",
+          "TotalQuantity": 24965
+        }
+      ]
+    },
+    {
+      "id": "component_4",
+      "title": "Order Status Distribution",
+      "type": "pie_chart",
+      "columns": [
+        "OrderStatus",
+        "Count"
+      ],
+      "sample_data": [
+        {
+          "OrderStatus": "Pending",
+          "Count": 2
+        },
+        {
+          "OrderStatus": "Shipped",
+          "Count": 1907
+        }
+      ]
+    },
+    {
+      "id": "component_5",
+      "title": "Customer Demographics",
+      "type": "bar_chart",
+      "columns": [],
+      "sample_data": []
+    },
+    {
+      "id": "component_6",
+      "title": "Shipping Methods Used",
+      "type": "bar_chart",
+      "columns": [
+        "CompanyName",
+        "Count"
+      ],
+      "sample_data": [
+        {
+          "CompanyName": "Federal Shipping",
+          "Count": 636
+        },
+        {
+          "CompanyName": "Speedy Express",
+          "Count": 640
+        },
+        {
+          "CompanyName": "United Package",
+          "Count": 633
+        }
+      ]
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Total Orders",
+      "type": "metric",
+      "description": "Total number of orders placed by customers in France",
+      "sql": "SELECT COUNT(*) AS TotalOrders FROM Orders JOIN Customers ON Orders.CustomerID = Customers.CustomerID WHERE Customers.Country = 'France';"
+    },
+    {
+      "id": "component_2",
+      "title": "Monthly Revenue",
+      "type": "chart",
+      "description": "Monthly revenue trend from orders in France",
+      "sql": "SELECT strftime('%Y-%m', OrderDate) AS Month, SUM((OrderDetails.UnitPrice * OrderDetails.Quantity) * (1 - OrderDetails.Discount)) AS Revenue FROM Orders JOIN Customers ON Orders.CustomerID = Customers.CustomerID JOIN 'Order Details' AS OrderDetails ON Orders.OrderID = OrderDetails.OrderID WHERE Customers.Country = 'France' GROUP BY strftime('%Y-%m', OrderDate) ORDER BY Month;"
+    },
+    {
+      "id": "component_3",
+      "title": "Top Products",
+      "type": "table",
+      "description": "List of top-selling products in France",
+      "sql": "SELECT Products.ProductName, SUM(OrderDetails.Quantity) AS TotalQuantity FROM Orders JOIN Customers ON Orders.CustomerID = Customers.CustomerID JOIN 'Order Details' AS OrderDetails ON Orders.OrderID = OrderDetails.OrderID JOIN Products ON OrderDetails.ProductID = Products.ProductID WHERE Customers.Country = 'France' GROUP BY Products.ProductID ORDER BY TotalQuantity DESC LIMIT 10;"
+    },
+    {
+      "id": "component_4",
+      "title": "Order Status Distribution",
+      "type": "pie_chart",
+      "description": "Distribution of order statuses for orders in France",
+      "sql": "SELECT CASE WHEN ShippedDate IS NOT NULL THEN 'Shipped' ELSE 'Pending' END AS OrderStatus, COUNT(*) AS Count FROM Orders JOIN Customers ON Orders.CustomerID = Customers.CustomerID WHERE Customers.Country = 'France' GROUP BY OrderStatus;"
+    },
+    {
+      "id": "component_5",
+      "title": "Customer Demographics",
+      "type": "bar_chart",
+      "description": "Demographics of customers placing orders in France",
+      "sql": "SELECT CustomerDemographics.CustomerDesc, COUNT(*) AS Count FROM Orders JOIN Customers ON Orders.CustomerID = Customers.CustomerID JOIN CustomerCustomerDemo ON Customers.CustomerID = CustomerCustomerDemo.CustomerID JOIN CustomerDemographics ON CustomerCustomerDemo.CustomerTypeID = CustomerDemographics.CustomerTypeID WHERE Customers.Country = 'France' GROUP BY CustomerDemographics.CustomerDesc;"
+    },
+    {
+      "id": "component_6",
+      "title": "Shipping Methods Used",
+      "type": "bar_chart",
+      "description": "Distribution of shipping methods used for orders in France",
+      "sql": "SELECT Shippers.CompanyName, COUNT(*) AS Count FROM Orders JOIN Customers ON Orders.CustomerID = Customers.CustomerID JOIN Shippers ON Orders.ShipVia = Shippers.ShipperID WHERE Customers.Country = 'France' GROUP BY Shippers.CompanyName;"
+    }
+  ],
+  "timestamp": "2026-10-14T01:57:54.046843"
+}
