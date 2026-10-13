@@ -1,0 +1,162 @@
+{
+  "dashboard_id": "dashboard_5baed47e",
+  "request": "Create two dashboards with different filters and verify that saving or loading one does not overwrite or contaminate the other.",
+  "search_document": "User Request: Create two dashboards with different filters and verify that saving or loading one does not overwrite or contaminate the other.\n\nDashboard Components:\nTitle: Monthly Revenue\nType: chart\nDescription: Monthly revenue trend\nTitle: Top 10 Products by Sales\nType: chart\nDescription: Top 10 products based on sales volume\nTitle: Customer Demographics\nType: table\nDescription: Summary of customer demographics\nTitle: Order Status Overview\nType: chart\nDescription: Overview of order statuses (Pending, Shipped, Delivered)\nTitle: Sales by Region\nType: chart\nDescription: Sales distribution across different regions\nTitle: Supplier Performance\nType: table\nDescription: Performance metrics for suppliers\nTitle: Employee Sales Performance\nType: chart\nDescription: Sales performance metrics by employee\nTitle: Inventory Levels\nType: chart\nDescription: Current inventory levels for products",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Monthly Revenue",
+      "type": "chart",
+      "chart_type": "line",
+      "x": "Month",
+      "y": "Revenue"
+    },
+    {
+      "id": "component_2",
+      "title": "Top 10 Products by Sales",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "ProductName",
+      "y": "TotalQuantity"
+    },
+    {
+      "id": "component_3",
+      "title": "Customer Demographics",
+      "type": "table"
+    },
+    {
+      "id": "component_4",
+      "title": "Order Status Overview",
+      "type": "chart",
+      "chart_type": "pie",
+      "x": "OrderStatus",
+      "y": "NumberOfOrders"
+    },
+    {
+      "id": "component_5",
+      "title": "Sales by Region",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "Region",
+      "y": "TotalSales"
+    },
+    {
+      "id": "component_6",
+      "title": "Supplier Performance",
+      "type": "table",
+      "columns": [
+        "SupplierID",
+        "CompanyName",
+        "NumberOfProducts",
+        "TotalUnitsInStock"
+      ],
+      "sample_data": [
+        {
+          "SupplierID": 1,
+          "CompanyName": "Exotic Liquids",
+          "NumberOfProducts": 3,
+          "TotalUnitsInStock": 69
+        },
+        {
+          "SupplierID": 2,
+          "CompanyName": "New Orleans Cajun Delights",
+          "NumberOfProducts": 4,
+          "TotalUnitsInStock": 133
+        },
+        {
+          "SupplierID": 3,
+          "CompanyName": "Grandma Kelly's Homestead",
+          "NumberOfProducts": 3,
+          "TotalUnitsInStock": 141
+        },
+        {
+          "SupplierID": 4,
+          "CompanyName": "Tokyo Traders",
+          "NumberOfProducts": 3,
+          "TotalUnitsInStock": 64
+        },
+        {
+          "SupplierID": 5,
+          "CompanyName": "Cooperativa de Quesos 'Las Cabras'",
+          "NumberOfProducts": 2,
+          "TotalUnitsInStock": 108
+        }
+      ]
+    },
+    {
+      "id": "component_7",
+      "title": "Employee Sales Performance",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "EmployeeName",
+      "y": "TotalSales"
+    },
+    {
+      "id": "component_8",
+      "title": "Inventory Levels",
+      "type": "chart",
+      "chart_type": "bar",
+      "x": "ProductName",
+      "y": "UnitsInStock"
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Monthly Revenue",
+      "type": "chart",
+      "description": "Monthly revenue trend",
+      "sql": "SELECT strftime('%Y-%m', OrderDate) AS Month, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS Revenue FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID GROUP BY Month ORDER BY Month"
+    },
+    {
+      "id": "component_2",
+      "title": "Top 10 Products by Sales",
+      "type": "chart",
+      "description": "Top 10 products based on sales volume",
+      "sql": "SELECT p.ProductName, SUM(od.Quantity) AS TotalQuantity FROM \"Order Details\" od JOIN Products p ON od.ProductID = p.ProductID GROUP BY p.ProductID ORDER BY TotalQuantity DESC LIMIT 10"
+    },
+    {
+      "id": "component_3",
+      "title": "Customer Demographics",
+      "type": "table",
+      "description": "Summary of customer demographics",
+      "sql": "SELECT cd.CustomerTypeID, cd.CustomerDesc, COUNT(ccd.CustomerID) AS NumberOfCustomers FROM CustomerDemographics cd LEFT JOIN CustomerCustomerDemo ccd ON cd.CustomerTypeID = ccd.CustomerTypeID GROUP BY cd.CustomerTypeID"
+    },
+    {
+      "id": "component_4",
+      "title": "Order Status Overview",
+      "type": "chart",
+      "description": "Overview of order statuses (Pending, Shipped, Delivered)",
+      "sql": "SELECT CASE WHEN ShippedDate IS NULL THEN 'Pending' WHEN ShippedDate < RequiredDate THEN 'Delivered' ELSE 'Shipped' END AS OrderStatus, COUNT(OrderID) AS NumberOfOrders FROM Orders GROUP BY OrderStatus"
+    },
+    {
+      "id": "component_5",
+      "title": "Sales by Region",
+      "type": "chart",
+      "description": "Sales distribution across different regions",
+      "sql": "SELECT e.Region, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalSales FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID JOIN Employees e ON o.EmployeeID = e.EmployeeID GROUP BY e.Region"
+    },
+    {
+      "id": "component_6",
+      "title": "Supplier Performance",
+      "type": "table",
+      "description": "Performance metrics for suppliers",
+      "sql": "SELECT s.SupplierID, s.CompanyName, COUNT(p.ProductID) AS NumberOfProducts, SUM(p.UnitsInStock) AS TotalUnitsInStock FROM Suppliers s LEFT JOIN Products p ON s.SupplierID = p.SupplierID GROUP BY s.SupplierID"
+    },
+    {
+      "id": "component_7",
+      "title": "Employee Sales Performance",
+      "type": "chart",
+      "description": "Sales performance metrics by employee",
+      "sql": "SELECT e.EmployeeID, e.LastName || ', ' || e.FirstName AS EmployeeName, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalSales FROM Orders o JOIN \"Order Details\" od ON o.OrderID = od.OrderID JOIN Employees e ON o.EmployeeID = e.EmployeeID GROUP BY e.EmployeeID ORDER BY TotalSales DESC"
+    },
+    {
+      "id": "component_8",
+      "title": "Inventory Levels",
+      "type": "chart",
+      "description": "Current inventory levels for products",
+      "sql": "SELECT p.ProductName, p.UnitsInStock FROM Products p ORDER BY p.UnitsInStock DESC"
+    }
+  ],
+  "timestamp": "2026-10-14T01:57:22.509451"
+}
