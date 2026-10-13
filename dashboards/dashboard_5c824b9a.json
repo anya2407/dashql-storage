@@ -1,0 +1,48 @@
+{
+  "dashboard_id": "dashboard_5c824b9a",
+  "request": "Show every category and the number of products in it, including categories with zero products.",
+  "search_document": "User Request: Show every category and the number of products in it, including categories with zero products.\n\nDashboard Components:\nTitle: Product Count by Category\nType: table\nDescription: Displays each category and the number of products in it, including categories with zero products.",
+  "dashboard_layout": [
+    {
+      "id": "component_1",
+      "title": "Product Count by Category",
+      "type": "table",
+      "columns": [
+        "CategoryName",
+        "ProductCount"
+      ],
+      "sample_data": [
+        {
+          "CategoryName": "Beverages",
+          "ProductCount": 12
+        },
+        {
+          "CategoryName": "Condiments",
+          "ProductCount": 12
+        },
+        {
+          "CategoryName": "Confections",
+          "ProductCount": 13
+        },
+        {
+          "CategoryName": "Dairy Products",
+          "ProductCount": 10
+        },
+        {
+          "CategoryName": "Grains/Cereals",
+          "ProductCount": 7
+        }
+      ]
+    }
+  ],
+  "sql_queries": [
+    {
+      "id": "component_1",
+      "title": "Product Count by Category",
+      "type": "table",
+      "description": "Displays each category and the number of products in it, including categories with zero products.",
+      "sql": "SELECT c.CategoryName, COUNT(p.ProductID) AS ProductCount FROM Categories c LEFT JOIN Products p ON c.CategoryID = p.CategoryID GROUP BY c.CategoryID, c.CategoryName"
+    }
+  ],
+  "timestamp": "2026-10-14T01:41:36.996408"
+}
